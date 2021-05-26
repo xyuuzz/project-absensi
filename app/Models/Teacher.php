@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Teacher extends Model
 {
+    protected $fillable = ["nign"];
+    
     public function absent()
     {
         return $this->hasMany(Absent::class);

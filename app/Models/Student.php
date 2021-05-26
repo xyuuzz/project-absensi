@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
+    protected $fillable = ["nis", "nisn", "hobi"];
+
     public function absents()
     {
         return $this->belongsToMany(Absent::class);

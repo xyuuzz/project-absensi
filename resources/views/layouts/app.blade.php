@@ -38,8 +38,8 @@
     <div id="app">
         @auth
             @yield("gelombang")
+            <livewire:navbar/>
         @endauth
-        <livewire:navbar/>
 
         <main class="py-4">
             @if(request()->routeIs("login"))
