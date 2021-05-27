@@ -91,7 +91,7 @@
             right:0;
             top:0;
             width:80%;
-            height:105vh;
+            height:100vh;
             justify-content: space-evenly;
             flex-direction: column;
             align-items: center;
@@ -127,11 +127,12 @@
                     </p>
                 </li>
                 <li><a href="{{route("home")}}">Home</a></li>
-                <li><a href="{{route("profile", ["user" => Auth::user()->name])}}">Profile</a></li>
                 @if(Auth::user()->role === "student")
+                    <li><a href="{{route("profile", ["user" => Auth::user()->name])}}">Profile</a></li>
                     <li><a href="#">Absensi</a></li>
                 @elseif(Auth::user()->role === "teacher")
-                    <li><a href="#">Buat Absensi</a></li>
+                    <li><a href="{{route("buat_absensi")}}">Buat Absensi</a></li>
+                    <li><a href="{{route("list_absensi")}}">List Absensi</a></li>
                 @else
                     <li><a href="#">Kelola Website</a></li>
                 @endif
@@ -157,17 +158,13 @@
     </nav>
 
     <script>
-        window.addEventListener("livewire:load", function() {
-
-        });
-
         const menuToggle= document.querySelector(".menu-bars");
         const nav = document.querySelector("nav ul");
         const list_li = document.getElementsByTagName("li");
 
+
         menuToggle.addEventListener("click", () => {
             nav.classList.toggle("slide");
-            console.log("berhasil");
         });
 
         window.setTimeout("waktu2()", 1000);

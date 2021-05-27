@@ -17,7 +17,7 @@ class ForStudents
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role === "siswa")
+        if(Auth::user()->role === "student")
         {
             return $next($request);
         }

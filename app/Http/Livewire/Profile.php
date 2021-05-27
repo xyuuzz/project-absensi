@@ -11,7 +11,7 @@ use Livewire\WithFileUploads; // use this namespace to uplade file on livewire
 
 class Profile extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads; // use trait for uplading files
 
     private $user;
     public $nis, $nisn, $hobi, $photo, $profile;

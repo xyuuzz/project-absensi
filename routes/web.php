@@ -1,10 +1,9 @@
 <?php
 
+use App\Http\Middleware\{ForTeacher, ForStudents};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\{Home, Profile, Absensi, BuatAbsensi};
-use App\Http\Middleware\ForStudents;
-use App\Http\Middleware\ForTeacher;
+use App\Http\Livewire\{Home, Profile, Absensi, BuatAbsensi, ListAbsensi, ListKelas};
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +34,6 @@ Route::middleware(['auth'])->group(function () {
 
     // halaman membuat absen untuk guru
     Route::get("/buat/absensi", BuatAbsensi::class)->middleware(ForTeacher::class)->name("buat_absensi");
+    Route::get("list/absensi", ListAbsensi::class)->middleware(ForTeacher::class)->name("list_absensi");
+    Route::get("list/kelas/{user:name}/{classes:class}/{absent:id}", ListKelas::class)->middleware(ForTeacher::class)->name("list_kelas");
 });

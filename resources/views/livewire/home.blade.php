@@ -1,6 +1,7 @@
 @section("gelombang")
 <svg class="position-absolute mt-5" style="top:25px; z-index:-99;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#a2d9ff" fill-opacity="1" d="M0,256L48,240C96,224,192,192,288,154.7C384,117,480,75,576,58.7C672,43,768,53,864,96C960,139,1056,213,1152,250.7C1248,288,1344,288,1392,288L1440,288L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
 @endsection
+@section("title", "Home")
 
 <div class="container">
     <div class="row jamku font-weight-bolder">
@@ -42,23 +43,31 @@
         </div>
     </div>
 
-    <script>
-        window.addEventListener("livewire:load", function() {
-            const menuToggle= document.querySelector(".menu-bars");
-            const jam = document.querySelector(".jamku");
-            const lijam = document.querySelector(".lijam");
+    @if(request()->routeIs("home"))
+    @push("scripts")
+        <script>
+            window.addEventListener("livewire:load", function() {
+                const menuToggle2= document.querySelector(".menu-bars");
+                const jam = document.querySelector(".jamku");
 
-            menuToggle.addEventListener("click", () => {
-                jam.classList.toggle("d-none");
+                menuToggle2.addEventListener("click", () => {
+                    jam.classList.toggle("d-none");
+                });
             });
-        });
-        window.setTimeout("waktu1()", 1000);
-        function waktu1() {
-            var waktu1 = new Date();
-            setTimeout("waktu1()", 1000);
-            document.getElementById("jam").innerHTML = waktu1.getHours();
-            document.getElementById("menit").innerHTML = waktu1.getMinutes();
-            document.getElementById("detik").innerHTML = waktu1.getSeconds();
-        }
-    </script>
+
+
+            window.setTimeout("waktu1()", 1000);
+            function waktu1() {
+                var waktu1 = new Date();
+                setTimeout("waktu1()", 1000);
+                if(document.getElementById("jam") && document.getElementById("menit") && document.getElementById("detik"))
+                {
+                    document.getElementById("jam").innerHTML = waktu1.getHours();
+                    document.getElementById("menit").innerHTML = waktu1.getMinutes();
+                    document.getElementById("detik").innerHTML = waktu1.getSeconds();
+                }
+            }
+        </script>
+        @endpush
+    @endif
 </div>
