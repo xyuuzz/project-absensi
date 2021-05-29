@@ -44,14 +44,15 @@
     </div>
 
     @if(request()->routeIs("home"))
-    @push("scripts")
         <script>
             window.addEventListener("livewire:load", function() {
                 const menuToggle2= document.querySelector(".menu-bars");
                 const jam = document.querySelector(".jamku");
 
                 menuToggle2.addEventListener("click", () => {
-                    jam.classList.toggle("d-none");
+                    if(jam !== null) {
+                        jam.classList.toggle("d-none");
+                    }
                 });
             });
 
@@ -68,6 +69,5 @@
                 }
             }
         </script>
-        @endpush
     @endif
 </div>

@@ -3,7 +3,7 @@
         /* Core */
         nav{
         display:flex;
-        background-color: rgb(126, 43, 204);
+        background-color: aqua;
         justify-content: space-around;
         padding:20px 0;
         color:rgb(255, 254, 254);
@@ -18,11 +18,22 @@
         list-style: none;
         width:40%;
         justify-content: space-between;
+        margin-top: 10px;
         }
         nav ul li a {
-        color:rgb(255, 254, 254);
+        color:black;
         text-decoration: none;
         font-size: 1em;
+        display: inline-block;
+        padding-bottom: 5px;
+        }
+        nav ul li a:hover {
+            text-decoration: none;
+            /* font-size: 20px; */
+            color: black;
+        }
+        nav ul li a:hover:after {
+            right: 0;
         }
         nav ul.slide{
             transform: translateX(0);
@@ -50,7 +61,7 @@
         display:block;
         width:28px;
         height:3px;
-        background-color:rgb(255, 254, 254);
+        background-color: white;
         border-radius: 3px;
         transition: all 0.3s;
         }
@@ -61,11 +72,11 @@
         transform-origin: 0 100% ;
         }
         .menu-bars input:checked ~ span:nth-child(2){
-        background-color: white;
+        background-color: black;
         transform: rotate(45deg) translate(-1px, -1px);
         }
         .menu-bars input:checked ~ span:nth-child(4){
-        background-color: white;
+        background-color: black;
         transform: rotate(-45deg) translate(-1px,0);
         }
         .menu-bars input:checked ~ span:nth-child(3){
@@ -77,6 +88,23 @@
             margin-left: 30px;
         }
         /* Mobile Menu */
+        @media (min-width: 992px){
+            .animatedBorder {
+            position: relative;
+        }
+            .animatedBorder::after {
+                content: '';
+                position: absolute;
+                border-bottom: 3px solid black;
+                bottom: 0;
+                left: 0;
+                right: 100%;
+                transition: all 500ms;
+                text-decoration: none;
+                font-size: 20px;
+                color: black;
+            }
+        }
         @media only screen and (max-width: 768px){
         nav ul{
             width:50%;
@@ -91,17 +119,18 @@
             right:0;
             top:0;
             width:80%;
-            height:100vh;
+            height:105vh;
             justify-content: space-evenly;
             flex-direction: column;
             align-items: center;
-            background-color: rgb(126, 43, 204);
+            background-color: white;
             z-index: 1000;
             transform: translateX(100%);
             transition: all 1s;
             position:fixed;
             top: 0;
             /* display: none; */
+            margin-top: -20px;
         }
         nav .logo img {
             margin-right: 270px;
@@ -110,34 +139,49 @@
             font-size: 15px;
             margin-left: 0px;
         }
+        nav ul li a{
+            padding: 20px 100px;
+        }
+        nav ul li a:hover {
+            background-color: black;
+            color: white;
+            width: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 50px 100px;
+            display: inline-block;
+            /* border: 10px solid ; */
+            border-radius: 12px;
+        }
         }
     </style>
 
     <nav>
         <div class="logo">
-          <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F1.bp.blogspot.com%2F-TVbL49YNck4%2FVXpkrY7Ac1I%2FAAAAAAAAAHs%2Foas2IDk6aGc%2Fs1600%2FLogo-SMK.jpg&f=1&nofb=1" alt="logo sekolah" width="70px">
+          <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F1.bp.blogspot.com%2F-TVbL49YNck4%2FVXpkrY7Ac1I%2FAAAAAAAAAHs%2Foas2IDk6aGc%2Fs1600%2FLogo-SMK.jpg&f=1&nofb=1" alt="logo sekolah" width="50px">
         </div>
         <ul>
             @auth
-                <li class="lijam d-lg-none">
+                <li class="lijam d-lg-none text-dark">
                     <p class="float-left ml-3">Pukul
                         <span id="jam1"></span> :
                         <span id="menit1"></span> :
                         <span id="detik1"></span>
                     </p>
                 </li>
-                <li><a href="{{route("home")}}">Home</a></li>
+                <li><a class="animatedBorder" href="{{route("home")}}">Home</a></li>
                 @if(Auth::user()->role === "student")
-                    <li><a href="{{route("profile", ["user" => Auth::user()->name])}}">Profile</a></li>
-                    <li><a href="#">Absensi</a></li>
+                    <li><a class="animatedBorder" href="{{route("profile", ["user" => Auth::user()->name])}}">Profile</a></li>
+                    <li><a class="animatedBorder" href="{{route("absensi")}}">Absensi</a></li>
                 @elseif(Auth::user()->role === "teacher")
-                    <li><a href="{{route("buat_absensi")}}">Buat Absensi</a></li>
-                    <li><a href="{{route("list_absensi")}}">List Absensi</a></li>
+                    <li><a class="animatedBorder" href="{{route("buat_absensi")}}">Buat Absensi</a></li>
+                    <li><a class="animatedBorder" href="{{route("list_absensi")}}">List Absensi</a></li>
                 @else
-                    <li><a href="#">Kelola Website</a></li>
+                    <li><a class="animatedBorder" href="{{route("kelola_guru")}}">Kelola Guru</a></li>
+                    <li><a class="animatedBorder" href="#">Kelola Siswa</a></li>
                 @endif
                 <li>
-                    <a href="{{ route('logout') }}"
+                    <a class="animatedBorder" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                     {{ __('Logout') }}
@@ -161,7 +205,6 @@
         const menuToggle= document.querySelector(".menu-bars");
         const nav = document.querySelector("nav ul");
         const list_li = document.getElementsByTagName("li");
-
 
         menuToggle.addEventListener("click", () => {
             nav.classList.toggle("slide");

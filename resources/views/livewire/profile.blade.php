@@ -4,10 +4,11 @@
 @section("gelombang_footer")
 <svg class="position-absolute" style="bottom:-700px; z-index: -999" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f3f4f5" fill-opacity="1" d="M0,224L51.4,96L102.9,160L154.3,96L205.7,128L257.1,64L308.6,192L360,0L411.4,256L462.9,256L514.3,288L565.7,160L617.1,160L668.6,256L720,32L771.4,256L822.9,96L874.3,192L925.7,0L977.1,256L1028.6,0L1080,32L1131.4,224L1182.9,256L1234.3,288L1285.7,256L1337.1,160L1388.6,256L1440,288L1440,320L1388.6,320L1337.1,320L1285.7,320L1234.3,320L1182.9,320L1131.4,320L1080,320L1028.6,320L977.1,320L925.7,320L874.3,320L822.9,320L771.4,320L720,320L668.6,320L617.1,320L565.7,320L514.3,320L462.9,320L411.4,320L360,320L308.6,320L257.1,320L205.7,320L154.3,320L102.9,320L51.4,320L0,320Z"></path></svg>
 @endsection
+@section("title", "Profile Siswa")
 <div class="container">
     <div class="card">
-        <div class="card-header bg-teal">
-            <h5 class="text-center text-primary"><b>Profil Siswa</b></h5>
+        <div class="card-header bg-teal rounded bg-info">
+            <h5 class="text-center mt-1"><b>Profil Siswa</b></h5>
         </div>
         <div class="card-body form-group">
             <form wire:submit.prevent='submitProfile' enctype="multipart/form-data">

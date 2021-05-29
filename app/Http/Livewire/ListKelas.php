@@ -7,18 +7,21 @@ use Livewire\Component;
 
 class ListKelas extends Component
 {
-    protected $class, $absent;
+    protected $students, $class;
 
     public function mount(Classes $classes, Absent $absent)
     {
         $this->class = $classes;
-        $this->absent = $absent;
+        $this->students = $absent->students()->where("classes_id", $classes->id)->latest()->get();
+        // dari table absent yang diterima dari route, lalu ke table student, ambil yang dimana classes_id nya sama seperti class id yang diterima dari route
     }
-    
+
     public function render()
     {
-        $class_students = $this->absent->students->where("classes_id", $this->class->id);
-        // dari table absent yang diterima dari route, lalu ke table student, ambil yang dimana classes_id nya sama seperti class id yang diterima dari route
-        return view('livewire.list-kelas', compact("class_students"));
+        return view('livewire.list-kelas', [
+            "students" => $this->students,
+            "class" => $this->class,
+        ]);
     }
+
 }

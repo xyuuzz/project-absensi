@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Middleware\{ForTeacher, ForStudents};
+use App\Http\Middleware\{Admin, ForTeacher, ForStudents};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\{Home, Profile, Absensi, BuatAbsensi, ListAbsensi, ListKelas};
+use App\Http\Livewire\{Home, Profile, Absensi, BuatAbsensi, KelolaGuru, ListAbsensi, ListKelas};
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +33,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get("/absensi", Absensi::class)->middleware(ForStudents::class)->name("absensi");
 
     // halaman membuat absen untuk guru
-    Route::get("/buat/absensi", BuatAbsensi::class)->middleware(ForTeacher::class)->name("buat_absensi");
-    Route::get("list/absensi", ListAbsensi::class)->middleware(ForTeacher::class)->name("list_absensi");
-    Route::get("list/kelas/{user:name}/{classes:class}/{absent:id}", ListKelas::class)->middleware(ForTeacher::class)->name("list_kelas");
+    Route::middleware(ForTeacher::class)->group(function() {
+        Route::get("/buat/absensi", BuatAbsensi::class)->name("buat_absensi");
+        Route::get("list/absensi", ListAbsensi::class)->name("list_absensi");
+        Route::get("list/kelas/{user:name}/{classes:class}/{absent:id}", ListKelas::class)->name("list_kelas");
+    });
+
+    Route::middleware(Admin::class)->group(function() {
+        Route::get("/admin/kelola/guru", KelolaGuru::class)->name("kelola_guru");
+    });
 });

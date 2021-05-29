@@ -19,20 +19,21 @@
         </div>
       </div>
     </div> --}}
-    
 
     @foreach($list_absensi as $absensi)
     <div class="card mt-4">
         <div class="card-body">
             <div class="mb-4">
+                {{-- {{dd(date("Y-m-d"). " " .date("H:i:s") >
+                date_format($absensi->created_at, "Y-m-d") . " " . $absensi->schedule->dimulai
+                &&
+                date("Y-m-d"). " " .date("H:i:s") <
+                date_format($absensi->created_at, "Y-m-d") . " " . $absensi->schedule->berakhir
+                )}} --}}
                 <span><b>{{date_format($absensi->created_at, "l, d F Y")}}</b></span>
-                @if($absensi->schedule->berakhir < date("H-i-s"))
-                    <span class="btn btn-sm btn-danger float-right mb-2">Ditutup</span>
-                @elseif($absensi->schedule->dimulai > date("H-i-s"))
-                    <span class="btn btn-sm btn-warning float-right mb-2">Segera Dibuka</span>
-                @else
-                    <span class="btn btn-sm btn-success float-right mb-2">Sedang Berlangsung</span>
-                @endif
+
+                @include("partials.status_absensi")
+
             </div>
             <hr>
             <p>Mata Pelajaran : <span>{{$absensi->teacher->mapel}}</span></p>
@@ -46,6 +47,7 @@
         </div>
     </div>
     @endforeach
+
     <div class="d-flex justify-content-center mt-4">
         <p class="text-center">{{$list_absensi->links("livewire::simple-bootstrap")}}</p>
     </div>
@@ -62,10 +64,10 @@
 
 
 {{-- CARA UNTUK VALIDASI SCHEDULE UNTUK SISWA --}}
-{{-- @if($list_absensi[0]->schedule->dimulai < date("H-i-s")) 
+{{-- @if($list_absensi[0]->schedule->dimulai < date("H:i:s"))
     {{dd($list_absensi[0]->schedule)}}
 @endif --}}
-{{-- 
-    looping setiap absensi(foreach) yang sudah difilter menurut kelas nya, 
-    buat kondisi dimana hanya tampilkan absensi yang masih di dalam jangkauan waktu schedule. 
---}} 
+{{--
+    looping setiap absensi(foreach) yang sudah difilter menurut kelas nya,
+    buat kondisi dimana hanya tampilkan absensi yang masih di dalam jangkauan waktu schedule.
+--}}
