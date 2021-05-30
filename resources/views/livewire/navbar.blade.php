@@ -3,7 +3,7 @@
         /* Core */
         nav{
         display:flex;
-        background-color: aqua;
+        background-color: white;
         justify-content: space-around;
         padding:20px 0;
         color:rgb(255, 254, 254);
@@ -61,7 +61,7 @@
         display:block;
         width:28px;
         height:3px;
-        background-color: white;
+        background-color: black;
         border-radius: 3px;
         transition: all 0.3s;
         }
@@ -87,29 +87,29 @@
             font-size: 25px;
             margin-left: 30px;
         }
-        /* Mobile Menu */
         @media (min-width: 992px){
-            .animatedBorder {
+        .animatedBorder {
             position: relative;
         }
-            .animatedBorder::after {
-                content: '';
-                position: absolute;
-                border-bottom: 3px solid black;
-                bottom: 0;
-                left: 0;
-                right: 100%;
-                transition: all 500ms;
-                text-decoration: none;
-                font-size: 20px;
-                color: black;
-            }
+        .animatedBorder::after {
+            content: '';
+            position: absolute;
+            border-bottom: 3px solid black;
+            bottom: 0;
+            left: 0;
+            right: 100%;
+            transition: all 500ms;
+            text-decoration: none;
+            font-size: 20px;
+            color: black;
+        }
         }
         @media only screen and (max-width: 768px){
         nav ul{
             width:50%;
         }
         }
+        /* Mobile Menu */
         @media only screen and (max-width: 576px){
         .menu-bars{
             display:flex;
@@ -178,7 +178,7 @@
                     <li><a class="animatedBorder" href="{{route("list_absensi")}}">List Absensi</a></li>
                 @else
                     <li><a class="animatedBorder" href="{{route("kelola_guru")}}">Kelola Guru</a></li>
-                    <li><a class="animatedBorder" href="#">Kelola Siswa</a></li>
+                    <li><a class="animatedBorder" href="{{route("kelola_siswa")}}">Kelola Siswa</a></li>
                 @endif
                 <li>
                     <a class="animatedBorder" href="{{ route('logout') }}"

@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Middleware\{Admin, ForTeacher, ForStudents};
+use App\Http\Livewire\KelolaSiswa;
+use App\Http\Livewire\IndexTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\{Admin, ForTeacher, ForStudents};
 use App\Http\Livewire\{Home, Profile, Absensi, BuatAbsensi, KelolaGuru, ListAbsensi, ListKelas};
 
 /*
@@ -41,5 +43,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(Admin::class)->group(function() {
         Route::get("/admin/kelola/guru", KelolaGuru::class)->name("kelola_guru");
+        Route::get("/admin/kelola/siswa", KelolaSiswa::class)->name("kelola_siswa");
     });
+
 });

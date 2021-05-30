@@ -2,29 +2,34 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\User;
+use App\Models\Student;
+use App\Models\Teacher;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\{Teacher, User};
 use Illuminate\Support\Facades\Hash;
 
-class KelolaGuru extends Component
+class IndexTemplate extends Component
 {
     use WithPagination;
 
-    public $view = "list_guru"; // default view adalah list_guru
-    public $name, $email, $nign, $mapel, $password, $s_based_on, $search, $e_guru;
-    // $e_guru sebagai edit_guru, variabel untuk form edit guru
+    protected $listeners = [
+        "teacherCreated"
+    ];
+
+    public $view = "index"; // default view adalah index
+    public $nama_guru, $email, $nign, $mapel, $password, $s_based_on, $search, $e_guru;
+    // $e_guru sebagai edit, variabel untuk form edit guru
     // $s_based_on = cari berdasarkan ... pada guru
     public $jenis_kelamin = "Laki-Laki"; // default jenis kelamin adalah laki-laki
 
     protected $updatedQueryString = ["search"];
 
-    protected $listeners = ["TeacherCreated"];
-
     public function updatingSearch()
     {
         $this->resetPage();
     }
+
 
     public function cari_berdasarkan($apa) // jika tombol cari berdasarkan di klik,
     {
@@ -33,11 +38,19 @@ class KelolaGuru extends Component
 
     public function render()
     {
+        $kumpulan_data = explode("/", request()->url())[count(explode("/", request()->url()))-1] === "guru" ?
+                            $this->search_teacher() : $this->search_students();
+        $index = 1;
+        return view('livewire.index-template', compact("kumpulan_data", "index"));
+    }
+
+    protected function search_teacher()
+    {
         $kumpulan_data = Teacher::latest()->simplePaginate(10);
         // jika tidak ada field pada table guru
         if(!Teacher::count()) {
             session()->flash("danger", "Tidak Ada Guru Yang Terdaftar, Silahkan Buat Guru Dengan Mengisi Form Dibawah");
-            $this->view = "buat_guru";
+            $this->view = "create";
         }
         // jika user mencari guru/ ada huruf pada input search
         if(strlen($this->search)) {
@@ -48,12 +61,42 @@ class KelolaGuru extends Component
                         : Teacher::where("mapel", "like", "%{$this->search}%")->get();
             // desk : jika $s_based_on adalah null atau name, maka cari guru berdasarkan name dengan query yang diinputkan admin, namun jika $s_based_on nya adalah mapel, maka cari guru berdasarkan mapel dengan query yang diinputkan admin
         }
-
-        $index = 1;
-        return view('livewire.kelola-guru', compact("kumpulan_data", "index"));
+        return $kumpulan_data;
     }
 
-    public function deleteData($user_id)
+    protected function search_students()
+    {
+        $kumpulan_data = Student::latest()->simplePaginate(10);
+        // jika tidak ada field pada table guru
+        if(!Student::count()) {
+            session()->flash("danger", "Tidak Ada Siswa Yang Terdaftar, Silahkan Buat Guru Dengan Mengisi Form Dibawah");
+            $this->view = "create";
+        }
+        // jika user mencari guru/ ada huruf pada input search
+        if(strlen($this->search)) {
+            $kumpulan_data = $this->s_based_on == null || $this->s_based_on == "name" ?
+                            array_map(function($user) {
+                                return Student::where("user_id", $user["id"])->first();
+                            }, User::where("role", "student")->where("name", "like", "%{$this->search}%")->get()->toArray())
+                        : Teacher::where("nis", "like", "%{$this->search}%")->get();
+            // desk : jika $s_based_on adalah null atau name, maka cari guru berdasarkan name dengan query yang diinputkan admin, namun jika $s_based_on nya adalah mapel, maka cari guru berdasarkan mapel dengan query yang diinputkan admin
+        }
+        return $kumpulan_data;
+    }
+
+
+    // listeners action method
+    public function teacherCreated()
+    {
+        // reset view agar bisa kembali ke halaman list guru
+        $this->view = "index";
+        // kirim session/alert/pengumuman
+        session()->flash("success", "Berhasil Mendaftarkan Guru!");
+    }
+    // end listeners action method
+
+
+    public function hapusGuru($user_id)
     {
         $guru = Teacher::where("user_id", $user_id)->first();
         if($guru->absent->count() > 0)
@@ -76,27 +119,24 @@ class KelolaGuru extends Component
         {
             session()->flash("success", "Berhasil Menghapus Data Guru");
         }
-
-        return redirect(route("kelola_guru"));
     }
 
-    public function viewBuatGuru()
+    public function createView()
     {
-        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        if($this->view == "list_guru") // jika view nya adalah list_guru,
+        $this->nama_guru=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
+        if($this->view == "index") // jika view nya adalah index,
         {
-            $this->view = "buat_guru"; // nanti jika di klik maka ubah ke view buat_guru
-        } else { // lalu ketika ada di view buat_guru, maka jika nanti di klik akan ke view list_guru
-            $this->view = "list_guru";
+            $this->view = "create"; // nanti jika di klik maka ubah ke view create
+        } else { // lalu ketika ada di view create, maka jika nanti di klik akan ke view index
+            $this->view = "index";
         }
     }
 
     public function editView(Teacher $guru)
     {
-        $this->emit("editTeacher");
-        $this->view = "edit_guru";
+        $this->view = "edit";
         $this->e_guru = $guru;
-        $this->name=$guru->user->name;
+        $this->nama_guru=$guru->user->name;
         $this->email=$guru->user->email;
         $this->nign=$guru->nign;
         $this->mapel=$guru->mapel;
@@ -105,7 +145,7 @@ class KelolaGuru extends Component
     public function editForm()
     {
         $this->validate([
-            "name" => "required|string|min:5",
+            "nama_guru" => "required|string|min:5",
             "email" => "required|email|max:50",
             "mapel" => "required|string|max:30",
             "nign" => "required|max:11",
@@ -114,7 +154,7 @@ class KelolaGuru extends Component
 
         $arr_user =
         [
-            "name" => $this->name,
+            "name" => $this->nama_guru,
             "email" => $this->email,
             "jenis_kelamin" => $this->jenis_kelamin
         ];
@@ -133,18 +173,9 @@ class KelolaGuru extends Component
         ]);
 
         // reset field pada form
-        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
         // reset view agar bisa kembali ke halaman list guru
-        $this->view = "list_guru";
+        $this->view = "index";
         // kirim session/alert/pengumuman
         session()->flash("success", "Data Guru Berhasil Di Ubah");
-    }
-
-    public function TeacherCreated()
-    {
-        // reset view agar bisa kembali ke halaman list guru
-        $this->view = "list_guru";
-        // kirim session/alert/pengumuman
-        session()->flash("success", "Berhasil Mendaftarkan Guru!");
     }
 }
