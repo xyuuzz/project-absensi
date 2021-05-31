@@ -1,4 +1,3 @@
-<div>
     <style>
         /* Core */
         nav{
@@ -224,5 +223,3 @@
             document.getElementById("detik1").innerHTML = waktu2.getSeconds();
         }
     </script>
-
-</div>

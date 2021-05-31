@@ -82,28 +82,30 @@
 <script>
     // const desk_kelas = document.getElementById("list_kelas");
     // let temp_k = [];
-    const sche = document.getElementById("sche");
-    let temp = [];
-    const v_kelas = document.querySelectorAll("input.form-check-input");
+    document.addEventListener("livewire:load", function() {
+        const sche = document.getElementById("sche");
+        let temp = [];
+        const v_kelas = document.querySelectorAll("input.form-check-input");
 
-    v_kelas.forEach(function(kelas) {
-        kelas.addEventListener("change", () => {
-            if(temp.indexOf(kelas.value) === -1 )
-            {
-                temp.push(kelas.value);
-                // temp_k.push(kelas.nextElementSibling.innerHTML);
-            } else
-            {
-                temp.splice(temp.indexOf(kelas.value), 1);
-                // temp_k.splice(temp_k.indexOf(kelas.value), 1);
-            }
-            // desk_kelas.innerHTML = `Kelas :  ${temp_k.join(", ")}`
+        v_kelas.forEach(function(kelas) {
+            kelas.addEventListener("change", () => {
+                if(temp.indexOf(kelas.value) === -1 )
+                {
+                    temp.push(kelas.value);
+                    // temp_k.push(kelas.nextElementSibling.innerHTML);
+                } else
+                {
+                    temp.splice(temp.indexOf(kelas.value), 1);
+                    // temp_k.splice(temp_k.indexOf(kelas.value), 1);
+                }
+                // desk_kelas.innerHTML = `Kelas :  ${temp_k.join(", ")}`
+            });
         });
-    });
 
-    sche.addEventListener("change", function() {
-        @this.set("list_kelas", temp);
-        @this.set("sche", sche.value);
-    });
+        document.getElementsByTagName("button")[0].addEventListener("click", () => {
+            @this.set("list_kelas", temp);
+            @this.set("sche", sche.value);
+        });
+    })
 
 </script>

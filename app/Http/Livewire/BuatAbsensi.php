@@ -8,8 +8,7 @@ use App\Models\{Absent, Schedule, Classes};
 
 class BuatAbsensi extends Component
 {
-    public $sche;
-    public $list_kelas;
+    public $sche, $list_kelas;
 
     public function render()
     {
@@ -31,9 +30,9 @@ class BuatAbsensi extends Component
             session()->flash("error", "Minimal Centang 1 Kelas!");
             return redirect()->back();
         }
-        
+
         // after validation
-        
+
         $absent = Absent::create([
             "teacher_id" => Auth::user()->teacher->id,
             "schedule_id" => $this->sche

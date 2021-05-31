@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-    protected $fillable = ["nis", "nisn", "hobi"];
+    protected $fillable = ["nis", "nisn", "hobi", "classes_id", "no_absen"];
 
     public function absents()
     {

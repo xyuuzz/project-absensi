@@ -1,6 +1,6 @@
 <div>
     <h4 class="mt-3 mb-3"><b>Lengkapi Formulir Untuk Mendaftarkan {{$status === "teacher" ? "Guru" : "Siswa"}} Baru : </b></h4>
-    <form wire:submit.prevent='{{$status === "teacher" ? "createTeacher" : "createStudent"}}' class="mt-3">
+    <form wire:submit.prevent='createForm' class="mt-3">
         <div class="form-group">
             <label for="name">Nama {{$status === "teacher" ? "Guru" : "Siswa"}}</label>
             <input required id="name" type="text" class="form-control" wire:model="name" placeholder="Masukan Nama Siswa" >
@@ -69,13 +69,10 @@
     </form>
 
     <script>
-        document.getElementsByTagName("input")[5].addEventListener("input", function() {
-            console.log("{{$nis}}");
-        });
         const jenis_kelamin = document.getElementById("jenis_kelamin");
-            jenis_kelamin.addEventListener("change", function() {
-                @this.set("jenis_kelamin", jenis_kelamin.value);
-                console.log("{{$jenis_kelamin}}")
+        jenis_kelamin.addEventListener("change", function() {
+            @this.set("jenis_kelamin", jenis_kelamin.value);
+            console.log("{{$jenis_kelamin}}");
             });
     </script>
 </div>

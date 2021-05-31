@@ -11,15 +11,15 @@ class KelolaGuru extends Component
 {
     use WithPagination;
 
-    public $view = "list_guru"; // default view adalah list_guru
-    public $name, $email, $nign, $mapel, $password, $s_based_on, $search, $e_guru;
-    // $e_guru sebagai edit_guru, variabel untuk form edit guru
+    public $view = "index"; // default view adalah index
+    public $name, $email, $nign, $mapel, $password, $s_based_on, $search, $edit_data;
+    // $edit_data sebagai edit_guru, variabel untuk form edit guru
     // $s_based_on = cari berdasarkan ... pada guru
     public $jenis_kelamin = "Laki-Laki"; // default jenis kelamin adalah laki-laki
 
     protected $updatedQueryString = ["search"];
 
-    protected $listeners = ["TeacherCreated"];
+    protected $listeners = ["teacherCreated", "teacherEdited"];
 
     public function updatingSearch()
     {
@@ -50,7 +50,8 @@ class KelolaGuru extends Component
         }
 
         $index = 1;
-        return view('livewire.kelola-guru', compact("kumpulan_data", "index"));
+        $status = "teacher";
+        return view('livewire.kelola-guru', compact("kumpulan_data", "index", "status"));
     }
 
     public function deleteData($user_id)
@@ -80,71 +81,37 @@ class KelolaGuru extends Component
         return redirect(route("kelola_guru"));
     }
 
-    public function viewBuatGuru()
+    public function createView()
     {
         $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        if($this->view == "list_guru") // jika view nya adalah list_guru,
+        if($this->view == "index") // jika view nya adalah index,
         {
-            $this->view = "buat_guru"; // nanti jika di klik maka ubah ke view buat_guru
-        } else { // lalu ketika ada di view buat_guru, maka jika nanti di klik akan ke view list_guru
-            $this->view = "list_guru";
+            $this->view = "create"; // nanti jika di klik maka ubah ke view buat_guru
+        } else { // lalu ketika ada di view buat_guru, maka jika nanti di klik akan ke view index
+            $this->view = "index";
         }
     }
 
-    public function editView(Teacher $guru)
+    public function editView($guru)
     {
-        $this->emit("editTeacher");
+        $this->emit("editTeacher", $guru);
         $this->view = "edit_guru";
-        $this->e_guru = $guru;
-        $this->name=$guru->user->name;
-        $this->email=$guru->user->email;
-        $this->nign=$guru->nign;
-        $this->mapel=$guru->mapel;
+        // $this->edit_data = $guru;
     }
 
-    public function editForm()
-    {
-        $this->validate([
-            "name" => "required|string|min:5",
-            "email" => "required|email|max:50",
-            "mapel" => "required|string|max:30",
-            "nign" => "required|max:11",
-            "password" => "min:8"
-        ]);
-
-        $arr_user =
-        [
-            "name" => $this->name,
-            "email" => $this->email,
-            "jenis_kelamin" => $this->jenis_kelamin
-        ];
-
-        // field password tidak kosong, maka masukan ke dalam array $arr_user yang nantinya akan di masukan ke dalam database
-        if($this->password !== "") {
-            $arr_user["password"] = Hash::make($this->password);
-        }
-
-        // edit field user
-        $this->e_guru->user->update($arr_user);
-        // edit field teacher
-        $this->e_guru->update([
-            "nign" => $this->nign,
-            "mapel" => $this->mapel
-        ]);
-
-        // reset field pada form
-        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        // reset view agar bisa kembali ke halaman list guru
-        $this->view = "list_guru";
-        // kirim session/alert/pengumuman
-        session()->flash("success", "Data Guru Berhasil Di Ubah");
-    }
-
-    public function TeacherCreated()
+    public function teacherCreated()
     {
         // reset view agar bisa kembali ke halaman list guru
-        $this->view = "list_guru";
+        $this->view = "index";
         // kirim session/alert/pengumuman
         session()->flash("success", "Berhasil Mendaftarkan Guru!");
+    }
+
+    public function teacherEdited()
+    {
+        // reset view agar bisa kembali ke halaman list guru
+        $this->view = "index";
+        // kirim session/alert/pengumuman
+        session()->flash("success", "Berhasil Mensunting Data Guru!");
     }
 }

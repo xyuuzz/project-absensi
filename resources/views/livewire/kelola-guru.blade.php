@@ -24,15 +24,16 @@
                 </div>
             @endif
 
-            <button wire:click='viewBuatGuru()' type="button" class="btn btn-sm btn-secondary">
-                {{$view === "list_guru" ? "Buat Anggota Guru Baru" : "Lihat List Guru"}}
+            <button wire:click='createView()' type="button" class="btn btn-sm btn-secondary">
+                {{$view === "index" ? "Buat Anggota Guru Baru" : "Lihat List Guru"}}
             </button>
-            @if($view === "list_guru")
+            @if($view === "index")
                 @include("partials.index_template")
-            @elseif($view === "buat_guru")
-                <livewire:buat-guru/>
+            @elseif($view === "create")
+                {{-- <livewire:create-template :status='teacher'/> --}}
+                @livewire("create-template", ["status" => "teacher"])
             @else
-                @include("partials.edit_template")
+                <livewire:edit-guru/>
             @endif
         </div>
     </div>

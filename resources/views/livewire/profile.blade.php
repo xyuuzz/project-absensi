@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="text" class="form-control" value="{{Auth::user()->email}}" readonly>
-                  <small id="email" class="form-text text-muted"><b>Email</b> Tidak Bisa diubah, jika ada salah penulisan silahkan hubungi admin</small>
+                    <small id="email" class="form-text text-muted"><b>Email</b> Tidak Bisa diubah, jika ada salah penulisan silahkan hubungi admin</small>
                 </div>
                 <div class="form-group">
                     <label for="nis">NIS</label>
