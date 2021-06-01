@@ -24,7 +24,12 @@ class BuatSiswa extends Component
             session()->flash("errorClass", "Penulisan Format Kelas Anda Salah");
             return redirect()->back();
         }
-
+        if(Student::where("classes_id", Classes::firstWhere("class", $this->class)->id)->where("no_absen", $this->no_absen)->count() > 1)
+        {
+            session()->flash("errorNoAbsen", "No Absen Sudah Dipakai!");
+            return redirect()->back();
+        }
+        dd("berhasil");
         $this->validate([
             "name" => "required|string|min:5",
             "email" => "required|email|max:50",

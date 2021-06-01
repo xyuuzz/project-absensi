@@ -67,7 +67,7 @@
     @elseif($status === "student")
         <div class="form-group">
             <label for="mapel">NIS</label>
-            <input required id="nis" type="text" {{ $nis }} class="form-control" wire:model="nis">
+            <input required id="nis" type="text" class="form-control" wire:model="nis">
             @error('nis') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror
         </div>
         <div class="form-group">

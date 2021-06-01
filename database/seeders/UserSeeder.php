@@ -21,23 +21,40 @@ class UserSeeder extends Seeder
                 "email" => "maulanayuusuf023@gmail.com",
                 "role" => "admin",
                 "password" => Hash::make("maulanayusuf"),
+                "jenis_kelamin" => "Laki-Laki"
             ],
             [
                 "name" => "bagus",
                 "email" => "sukabagus@gmail.com",
                 "role" => "teacher",
                 "password" => Hash::make("sukabagus"),
+                "jenis_kelamin" => "Laki-Laki"
             ],
             [
                 "name" => "nanakana",
                 "email" => "kananana1212@gmail.com",
                 "role" => "student",
                 "password" => Hash::make("nanakana"),
+                "jenis_kelamin" => "Laki-Laki"
             ]
         ]);
 
         $users->each(function($user) {
-            User::create($user);
+            $u = User::create($user);
+            if($user["role"] === "teacher") {
+                $u->teacher()->create([
+                    "nign" => 3213123,
+                    "mapel" => "Sejarah"
+                ]);
+            } else if($user["role"] === "student") {
+                $u->student()->create([
+                    "classes_id" => 1,
+                    "nisn" => "32132321321",
+                    "nis" => 3232,
+                    "no_absen" => 33,
+                    "photo_profile" => "foto-profil.png"
+                ]);
+            }
         });
     }
 }

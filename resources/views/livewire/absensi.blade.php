@@ -9,7 +9,7 @@
     @endif
 
     {{-- {{dd($absensi)}} --}}
-    @foreach($list_absensi as $absensi)
+    @forelse($list_absensi as $absensi)
         {{-- @foreach($absensi->classes) --}}
     <div class="card mt-4">
         <div class="card-body">
@@ -24,7 +24,11 @@
             @include("partials.status_absensi")
         </div>
     </div>
-    @endforeach
+    @empty
+        <div class="card">
+            <div class="card-header">Tidak Ada Absensi Hari Ini</div>
+        </div>
+    @endforelse
 
     <div class="d-flex justify-content-center mt-4">
         <p class="text-center">{{$list_absensi->links("livewire::simple-bootstrap")}}</p>

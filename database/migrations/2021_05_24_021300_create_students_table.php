@@ -17,8 +17,11 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->integer("user_id");
             $table->integer("classes_id");
-            $table->integer("nisn")->nullable();
+            $table->string("nisn")->nullable();
             $table->integer("nis")->nullable();
+            $table->integer("no_absen");
+            $table->string("photo_profile");
+            $table->string("hobi")->nullable();
             $table->timestamps();
         });
     }

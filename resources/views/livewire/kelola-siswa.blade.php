@@ -31,11 +31,9 @@
                 @include("partials.index_template")
             @elseif($view === "create")
                 {{-- @include ("partials.create_template") --}}
-                {{-- <livewire:buat-siswa/> --}}
-                {{-- @livewire("create-template", ["status" => "student"]) --}}
-                @include("partials.create_template")
+                @livewire("create-template", ["status" => "student"])
             @else
-                @include("partials.edit_template")
+                @livewire("edit-template", ["status" => "student"])
             @endif
         </div>
     </div>

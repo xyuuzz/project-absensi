@@ -12,14 +12,13 @@ class KelolaGuru extends Component
     use WithPagination;
 
     public $view = "index"; // default view adalah index
-    public $name, $email, $nign, $mapel, $password, $s_based_on, $search, $edit_data;
-    // $edit_data sebagai edit_guru, variabel untuk form edit guru
+    public $name, $email, $nign, $mapel, $password, $s_based_on, $search;
     // $s_based_on = cari berdasarkan ... pada guru
     public $jenis_kelamin = "Laki-Laki"; // default jenis kelamin adalah laki-laki
 
     protected $updatedQueryString = ["search"];
 
-    protected $listeners = ["teacherCreated", "teacherEdited"];
+    protected $listeners = ["successCreated", "succesUpdated"];
 
     public function updatingSearch()
     {
@@ -94,12 +93,11 @@ class KelolaGuru extends Component
 
     public function editView($guru)
     {
-        $this->emit("editTeacher", $guru);
+        $this->emit("editData", $guru);
         $this->view = "edit_guru";
-        // $this->edit_data = $guru;
     }
 
-    public function teacherCreated()
+    public function successCreated()
     {
         // reset view agar bisa kembali ke halaman list guru
         $this->view = "index";
@@ -107,7 +105,7 @@ class KelolaGuru extends Component
         session()->flash("success", "Berhasil Mendaftarkan Guru!");
     }
 
-    public function teacherEdited()
+    public function succesUpdated()
     {
         // reset view agar bisa kembali ke halaman list guru
         $this->view = "index";

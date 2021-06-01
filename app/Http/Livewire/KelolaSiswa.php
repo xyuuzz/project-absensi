@@ -15,7 +15,7 @@ class KelolaSiswa extends Component
     public $view = "index";
     public $name, $email, $nis, $nisn, $password, $s_based_on, $search, $class, $edit_data, $jenis_kelamin, $no_absen;
 
-    public $listeners = ["studentCreated"];
+    public $listeners = ["successCreated", "succesUpdated"];
 
     public function updatingSearch()
     {
@@ -79,108 +79,24 @@ class KelolaSiswa extends Component
         return redirect(route("kelola_siswa"));
     }
 
-    public function editView(Student $siswa)
+    public function editView($siswa)
     {
         $this->view = "edit";
-        $this->edit_data = $siswa;
-        $this->name=$siswa->user->name;
-        $this->email=$siswa->user->email;
-        $this->nisn=$siswa->nisn;
-        $this->nis=$siswa->nis;
-        $this->no_absen=$siswa->no_absen;
-        $this->class=$siswa->classes->class;
-        $this->password = '';
-        $this->jenis_kelamin = $siswa->user->jenis_kelamin;
+        $this->emit("editData", $siswa);
     }
 
-    public function studentCreated()
+    public function successCreated()
     {
         $this->view = "index";
         session()->flash("success", "Berhasil Menambahkan Data Siswa");
     }
 
-    public function editForm()
+    public function succesUpdated()
     {
-        if(!Classes::where("class", $this->class)->count()) {
-            session()->flash("errorClass", "Penulisan Format Kelas Anda Salah");
-            return redirect()->back();
-        }
-
-        if(Student::where("classes_id", Classes::firstWhere("class", $this->class)->id)->where("no_absen", $this->no_absen)->count() > 1)
-        {
-            session()->flash("errorNoAbsen", "No Absen Sudah Dipakai!");
-            return redirect()->back();
-        }
-
-        $this->validate([
-            "name" => "required|string|min:5",
-            "email" => "required|email|max:50",
-            "nis" => "required|numeric",
-            "nisn" => "required|numeric",
-            "password" => "min:8"
-        ]);
-
-        $arr_user =
-        [
-            "name" => $this->name,
-            "email" => $this->email,
-            "jenis_kelamin" => $this->jenis_kelamin
-        ];
-
-        // field password tidak kosong, maka masukan ke dalam array $arr_user yang nantinya akan di masukan ke dalam database
-        if($this->password !== "") {
-            $arr_user["password"] = Hash::make($this->password);
-        }
-
-        $this->edit_data->user->update($arr_user);
-        $this->edit_data->update([
-            "nis" => $this->nis,
-            "nisn" => $this->nisn,
-            "no_absen" => $this->no_absen,
-            "classes_id" => Classes::where("class", $this->class)->first()->id
-        ]);
-
-        $this->name=""; $this->email=""; $this->nis=""; $this->nisn=""; $this->password=""; $this->class=""; $this->no_absen=""; $this->jenis_kelamin="";
         // reset view agar bisa kembali ke halaman list guru
         $this->view = "index";
         // kirim session/alert/pengumuman
-        session()->flash("success", "Data Siswa Berhasil Di Ubah");
+        session()->flash("success", "Berhasil Mensunting Data Guru!");
     }
 
-    public function createForm()
-    {
-        if(!Classes::where("class", $this->class)->count()) {
-            session()->flash("errorClass", "Penulisan Format Kelas Anda Salah");
-            return redirect()->back();
-        }
-
-        $this->validate([
-            "name" => "required|string|min:5",
-            "email" => "required|email|max:50",
-            "nis" => "required|numeric|max:30",
-            "nisn" => "required|numeric|max:11",
-            "no_absen" => "required|numeric|max:40",
-            "password" => "required|string|min:8"
-        ]);
-
-        $user = User::create([
-            "name" => $this->name,
-            "email" => $this->email,
-            "role" => "student",
-            "password" => Hash::make($this->password),
-            "jenis_kelamin" => $this->jenis_kelamin,
-        ]);
-        dd("berhasil");
-        // create field teacher
-        $user->student()->create([
-            "nis" => $this->nis,
-            "nisn" => $this->nisn,
-            "no_absen" => $this->no_absen,
-            "classes_id" => Classes::firstWhere("name", $this->class)->id
-        ]);
-
-        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        $this->view = "index";
-        session()->flash("success", "Berhasil Menambahkan Data Siswa");
-    }
 }

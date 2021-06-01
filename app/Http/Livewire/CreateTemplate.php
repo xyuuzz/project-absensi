@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\User;
-use App\Models\Classes;
+use App\Models\{User, Student, Classes};
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CreateTemplate extends Component
@@ -25,62 +25,68 @@ class CreateTemplate extends Component
         return view('livewire.create-template');
     }
 
-    public function createTeacher()
+    public function createForm()
     {
-        $this->validate([
-            "name" => "required|string|min:5",
-            "email" => "required|email|max:50",
-            "mapel" => "required|string|max:30",
-            "nign" => "required|string|max:11",
-            "password" => "required|string|min:8"
-        ]);
-        $user = User::create([
-            "name" => $this->name,
-            "email" => $this->email,
-            "role" => "teacher",
-            "password" => Hash::make($this->password),
-            "jenis_kelamin" => $this->jenis_kelamin,
-        ]);
-        // create field teacher
-        $user->teacher()->create([
-            "nign" => $this->nign,
-            "mapel" => $this->mapel
-        ]);
+        $user = $this->createUser();
+        if($this->status === "teacher")
+        {
+            $this->createTeacher($user);
+        } else {
+            $this->createStudent($user);
+        }
 
         $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        $this->emit("teacherCreated");
+        $this->emit("successCreated");
     }
 
-    public function createStudent()
+    protected function createUser()
     {
-        dd("berhasil");
-        if(!Classes::where("class", $this->class)->count()) {
-            session()->flash("errorClass", "Penulisan Format Kelas Anda Salah");
-            return redirect()->back();
-        }
         $this->validate([
             "name" => "required|string|min:5",
-            "email" => "required|email|max:50",
-            "nis" => "required|numeric|max:30",
-            "nisn" => "required|numeric|max:11",
-            "no_absen" => "required|numeric|max:40",
-            "password" => "required|string|min:8"
+            "email" => "required|email|max:50|unique:users",
+            "password" => "min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|",
         ]);
-        $user = User::create([
+        return $user = User::create([
             "name" => $this->name,
             "email" => $this->email,
             "role" => "student",
             "password" => Hash::make($this->password),
             "jenis_kelamin" => $this->jenis_kelamin,
         ]);
-        // create field teacher
-        $user->student()->create([
-            "nis" => $this->nis,
-            "nisn" => $this->nisn,
-            "no_absen" => $this->no_absen,
-            "classes_id" => Classes::firstWhere("name", $this->class)->id
+    }
+    
+    protected function createTeacher($user)
+    {
+        $this->validate([
+            "mapel" => "required|string|max:30",
+            "nign" => "required|string|max:11",
         ]);
-        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        $this->emit("studentCreated");
+        // create field teacher
+        $user->teacher()->create([
+            "nign" => $this->nign,
+            "mapel" => $this->mapel
+        ]);
+    }
+
+    protected function createStudent($user)
+    {
+        if(!Classes::where("class", $this->class)->count()) {
+            session()->flash("errorClass", "Penulisan Format Kelas Anda Salah");
+            return redirect()->back();
+        }
+
+        $user->student()->create([
+            "no_absen" => $this->no_absen,
+            "classes_id" => Classes::firstWhere("class", $this->class)->id,
+            "photo_profile" => "foto-profil.png",
+            "nis" => $this->nis,
+            "nisn" => $this->nisn
+        ]);
+
+        if(Student::where("classes_id", Classes::firstWhere("class", $this->class)->id)->where("no_absen", $this->no_absen)->count() > 1)
+        {
+            session()->flash("errorNoAbsen", "No Absen Sudah Dipakai!");
+            return redirect()->back();
+        }
     }
 }

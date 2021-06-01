@@ -33,7 +33,8 @@
                 {{-- <livewire:create-template :status='teacher'/> --}}
                 @livewire("create-template", ["status" => "teacher"])
             @else
-                <livewire:edit-guru/>
+                {{-- <livewire:edit-guru/> --}}
+                @livewire("edit-template", ["status" => "teacher"])
             @endif
         </div>
     </div>

@@ -30,7 +30,7 @@ class Profile extends Component
         $this->nis = Auth::user()->student->nis;
         $this->nisn = Auth::user()->student->nisn;
         $this->hobi = Auth::user()->student->hobi;
-        $this->profile  = Auth::user()->photo_profile;
+        $this->profile  = Auth::user()->student->photo_profile;
     }
 
     public function render()
@@ -62,7 +62,7 @@ class Profile extends Component
 
         if($name_photo ?? false)
         {
-            Auth::user()->student->user->update(["photo_profile" => $name_photo]);
+            Auth::user()->student->update(["photo_profile" => $name_photo]);
             $this->profile = $name_photo;
         }
 
