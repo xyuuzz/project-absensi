@@ -51,25 +51,29 @@ class EditTemplate extends Component
         $this->updateUser();
         if($this->status === "teacher") {
             $this->updateTeacher();
+            $status = "teacher";
         } else {
             if($this->updateStudent() === "error") {
                 return redirect()->back();
             }
+            $status = "student";
         }
 
         // reset field pada form
         $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password=""; $this->nisn=""; $this->nis=""; $this->no_absen=""; $this->class="";
-        $this->emit("succesUpdated");
+        $this->emit("succesUpdated", $status);
     }
 
     protected function updateUser()
     {
         $this->validate([
-            "name" => "required|string|min:5",
-            "email" => "required|email|max:50",
+            "name" => "required|string",
+            "email" => "required|email",
+        ], [
+            "name.string" => "Input Nama Hanya Berupa Huruf",
         ]);
         if($this->email !== $this->kelola_data->user->email) {
-            $this->validate(["email" => "unique:users"]);
+            $this->validate(["email" => "unique:users"], ["email.unique" => "Email Yang Anda Inputkan Sudah Ada"]);
         }
 
         $arr_user =
@@ -91,9 +95,13 @@ class EditTemplate extends Component
     protected function updateTeacher()
     {
         $this->validate([
-            "mapel" => "required|string|max:30",
-            "nign" => "required|max:20",
+            "mapel" => "required|string",
+            "nign" => "required|numeric",
+        ], [
+            "mapel.string" => "Input Mapel Berupa Huruf Numeric",
+            "nign.numeric" => "NIGN Berupa Angka Bukun Huruf",
         ]);
+
         $this->kelola_data->update([
             "nign" => $this->nign,
             "mapel" => $this->mapel
@@ -110,7 +118,11 @@ class EditTemplate extends Component
         $this->validate([
             "nis" => "required|numeric",
             "nisn" => "required|numeric",
-            "no_absen" => "required|digits_between:1,40"
+            "no_absen" => "required|numeric|max:40"
+        ], [ // validate
+            "no_absen.max" => "Maximal Angka No Absen Adalah 40",
+            "nis.numeric" => "NIS Hanya Berupa Huruf",
+            "nisn.numeric" => "NISN Hanya Berupa Huruf",
         ]);
         $this->kelola_data->update([
             "nis" => $this->nis,

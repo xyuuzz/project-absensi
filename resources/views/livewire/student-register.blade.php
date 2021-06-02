@@ -1,8 +1,5 @@
-@extends('layouts.app')
-
 @section("title", "Register")
 
-@section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -10,14 +7,13 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
+                    <form wire:submit.prevent='createForm'>
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Nama</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -31,7 +27,7 @@
                             <label for="class" class="col-md-4 col-form-label text-md-right">Kelas</label>
 
                             <div class="col-md-6">
-                                <input id="class" type="text" class="form-control" name="class" value="{{ "nanti" }}" disabled>
+                                <input id="class" type="text" class="form-control" disabled>
                             </div>
                         </div>
 
@@ -39,7 +35,7 @@
                             <label for="no_absen" class="col-md-4 col-form-label text-md-right">No Absen</label>
 
                             <div class="col-md-6">
-                                <input id="no_absen" type="number" class="form-control @error('no_absen') is-invalid @enderror" name="no_absen" required>
+                                <input id="no_absen" type="number" class="form-control @error('no_absen') is-invalid @enderror" no_absen" required>
                                 @error('no_absen')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -52,7 +48,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">Alamat Email</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" required autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -66,11 +62,10 @@
                             <label for="jenis_kelamin" class="col-md-4 col-form-label text-md-right">Jenis Kelamin</label>
 
                             <div class="col-md-6">
-                                <select name="jenis_kelamin" class="form-group">
+                                <select id="jenis_kelamin" wire:ignore class="form-group">
                                     <option>Laki-Laki</option>
                                     <option>Perempuan</option>
                                 </select>
-                                {{-- <input id="jenis_kelamin" type="text" class="form-control @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{ old('jenis_kelamin') }}" required autocomplete="jenis_kelamin"> --}}
 
                                 @error('jenis_kelamin')
                                     <span class="invalid-feedback" role="alert">
@@ -84,7 +79,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password">
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -98,7 +93,7 @@
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Konfirmasi Password</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control" required autocomplete="new-password">
                             </div>
                         </div>
 
@@ -114,5 +109,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const jenis_kelamin = document.getElementById("jenis_kelamin");
+
+        jenis_kelamin.addEventListener("change", () => {
+            $this.set("jenis_kelamin", jenis_kelamin.value);
+        });
+    </script>
 </div>
-@endsection

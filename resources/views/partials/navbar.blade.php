@@ -1,3 +1,4 @@
+<div>
     <style>
         /* Core */
         nav{
@@ -204,11 +205,9 @@
           <span></span>
         </div>
     </nav>
-
     <script>
         const menuToggle= document.querySelector(".menu-bars");
         const nav = document.querySelector("nav ul");
-        const list_li = document.getElementsByTagName("li");
 
         menuToggle.addEventListener("click", () => {
             nav.classList.toggle("slide");
@@ -223,3 +222,5 @@
             document.getElementById("detik1").innerHTML = waktu2.getSeconds();
         }
     </script>
+
+</div>

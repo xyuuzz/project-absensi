@@ -37,6 +37,11 @@
                     <small id="email" class="form-text text-muted"><b>Email</b> Tidak Bisa diubah, jika ada salah penulisan silahkan hubungi admin</small>
                 </div>
                 <div class="form-group">
+                    <label for="email">Jenis Kelamin</label>
+                    <input type="text" class="form-control" value="{{Auth::user()->jenis_kelamin}}" readonly>
+                    <small id="email" class="form-text text-muted"><b>Jenis Kelamin</b> Tidak Bisa diubah, jika ada salah penulisan silahkan hubungi admin</small>
+                </div>
+                <div class="form-group">
                     <label for="nis">NIS</label>
                     <input id="nis" type="number" class="form-control" placeholder="NIS Siswa" wire:model='nis' value=1212>
                     @error('nis') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror

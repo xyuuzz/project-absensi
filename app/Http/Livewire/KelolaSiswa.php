@@ -15,7 +15,7 @@ class KelolaSiswa extends Component
     public $view = "index";
     public $name, $email, $nis, $nisn, $password, $s_based_on, $search, $class, $edit_data, $jenis_kelamin, $no_absen;
 
-    public $listeners = ["successCreated", "succesUpdated"];
+    public $listeners = ["successCreated", "succesUpdated", "linkCreated"];
 
     public function updatingSearch()
     {
@@ -61,6 +61,17 @@ class KelolaSiswa extends Component
         }
     }
 
+    public function editView($siswa)
+    {
+        $this->view = "edit";
+        $this->emit("editData", $siswa);
+    }
+
+    public function linkView()
+    {
+        $this->view = "link";
+    }
+
     public function deleteData($user_id)
     {
         $siswa = Student::firstWhere("user_id", $user_id);
@@ -79,24 +90,31 @@ class KelolaSiswa extends Component
         return redirect(route("kelola_siswa"));
     }
 
-    public function editView($siswa)
-    {
-        $this->view = "edit";
-        $this->emit("editData", $siswa);
-    }
-
-    public function successCreated()
+    public function successCreated($status)
     {
         $this->view = "index";
-        session()->flash("success", "Berhasil Menambahkan Data Siswa");
+        $kata = $status === "teacher" ? "Guru" : "Siswa";
+        if($status === "link") {
+            $kata = "Link Register Siswa";
+        }
+        session()->flash("success", "Berhasil Menambahkan Data $kata");
     }
 
-    public function succesUpdated()
+    public function succesUpdated($status)
     {
         // reset view agar bisa kembali ke halaman list guru
         $this->view = "index";
         // kirim session/alert/pengumuman
-        session()->flash("success", "Berhasil Mensunting Data Guru!");
+        $kata = $status === "teacher" ? "Guru" : "Siswa";
+        session()->flash("success", "Berhasil Mensunting Data $kata");
     }
 
+    // protected function send_mail($status, $action)
+    // {
+    //     if($status === "link")
+    //     {
+    //         return "Berhasil Membuat Link Register Untuk Siswa";
+    //     }
+    //     return "Berhasil " . $action ===
+    // }
 }

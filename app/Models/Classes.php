@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\{Absent, Student};
+use App\Models\{Absent, Student, RegisterStudent};
 use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
@@ -17,5 +17,10 @@ class Classes extends Model
     public function student()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function register_students()
+    {
+        return $this->hasMany(RegisterStudent::class);
     }
 }

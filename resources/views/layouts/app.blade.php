@@ -42,7 +42,7 @@
         @endauth
 
         <main class="py-4">
-            @if(request()->routeIs("login"))
+            @if(request()->routeIs("login") || request()->routeIs("register"))
                 @yield('content')
             @endif
 

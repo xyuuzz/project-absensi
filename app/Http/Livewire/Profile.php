@@ -3,26 +3,15 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
-use App\Models\Student;
-use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Livewire\WithFileUploads; // use this namespace to uplade file on livewire
+use Livewire\{Component, WithFileUploads}; // use this namespace to uplade file on livewire
+use Illuminate\Support\Facades\{Storage, Auth};
 
 class Profile extends Component
 {
     use WithFileUploads; // use trait for uplading files
 
-    private $user;
-    public $nis, $nisn, $hobi, $photo, $profile;
-
-    protected $messages = [
-        "nis.max" => "Max Angka NIS adalah 4",
-        "hobi.max" => "Maximal 30 huruf",
-        "photo.mimes" => "Ekstensi Yang diperbolehkan adalah png, jpg, dan jpeg",
-        "photo.max" => "Max Size Foto adalah 2MB",
-        "photo.image" => "File harus berupa Foto!"
-    ];
+    protected $user;
+    public $nis, $nisn, $hobi, $photo, $profile; // model
 
     public function mount(User $user)
     {
@@ -42,9 +31,15 @@ class Profile extends Component
     {
         // validate
         $this->validate([
-            "nis" => "max:4",
+            "nis" => "max:6",
             "hobi" => "max:30",
-            "photo" => "max:2048"
+            "photo" => "max:1024"
+        ], [
+            "nis.max" => "Max Angka NIS adalah 6",
+            "hobi.max" => "Maximal 30 huruf",
+            "photo.mimes" => "Ekstensi Yang diperbolehkan adalah png, jpg, dan jpeg",
+            "photo.max" => "Max Size Foto adalah 1MB",
+            "photo.image" => "File harus berupa Foto!"
         ]);
 
         // after validate
@@ -52,16 +47,12 @@ class Profile extends Component
         {
             if(Auth::user()->photo_profile !== "foto-profil.png")
             {
-                Storage::delete("public/photo_profiles/" . Auth::user()->photo_profile);
+                Storage::delete("public/photo_profiles/" . Auth::user()->student->photo_profile);
             }
-
             $name_photo = uniqid() . "." . $this->photo->extension(); // give uniqe name of photo
             $this->photo->storeAs("public/photo_profiles", $name_photo); // store photo on storage
-            Storage::deleteDirectory("livewire-tmp");
-        }
+            if(Storage::exists("livewire-tmp")) { Storage::deleteDirectory("livewire-tmp"); }
 
-        if($name_photo ?? false)
-        {
             Auth::user()->student->update(["photo_profile" => $name_photo]);
             $this->profile = $name_photo;
         }
@@ -83,10 +74,9 @@ class Profile extends Component
         $this->nis = Auth::user()->student->nis;
         $this->nisn = Auth::user()->student->nisn;
         $this->hobi = Auth::user()->student->hobi;
+        $this->photo = null;
 
+        $this->emit("updatePhoto");
         session()->flash("success", "Data Profil berhasil di Update!");
     }
-
-
-
 }

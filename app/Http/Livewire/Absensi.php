@@ -17,17 +17,25 @@ class Absensi extends Component
     public function render()
     {
         $list_absensi = [];
+        // filter absen yang ada, sesuai kelas yang dimiliki oleh user.
         foreach(Absent::get() as $absent) // looping setiap absent
         {
-            foreach($absent->classes as $class) // looping kelas yang dimiliki absent
-            {
+            // dd(array_map(function($row) {
+            //     if(Auth::user()->student->classes_id === $row["id"]) {
+            //         return Absent::firstWhere("id", $row["pivot"]["absent_id"]);
+            //     }
+            // }, $absent->classes->toArray()));
 
-                if(Auth::user()->student->classes_id === $class->id)
+            foreach($absent->classes as $class) // looping/dapatkan semua kelas yang dimiliki absent
+            {
+                // jika class id sama seperti classes_id yang dimiliki oleh user student dan absent dibuat pada hari itu, maka masukan absent ke dalam array.
+                if(Auth::user()->student->classes_id === $class->id && date_format($absent->created_at, "Y-m-d") === date("Y-m-d"))
                 {
                     array_push($list_absensi, $absent);
                 }
             }
         }
+        // paginate array yang sudah di proses
         $list_absensi = $this->paginate(array_reverse($list_absensi, true));
         return view('livewire.absensi', compact("list_absensi"));
     }
@@ -41,10 +49,16 @@ class Absensi extends Component
 
     public function clickAbsen(Absent $absent)
     {
-        $absent->students()->attach(Auth::user()->student->id);
+        // Jika Masih di dalam jadwal, maka siswa dinyatakan berhasil absen
+        if(
+            date("Y-m-d H:i:s") > date_format($absent->created_at, "Y-m-d") . " " . $absent->schedule->dimulai
+            &&
+            date("Y-m-d H:i:s") < date_format($absent->created_at, "Y-m-d") . " " . $absent->schedule->berakhir
+        ) {
+            $absent->students()->attach(Auth::user()->student->id);
+            session()->flash("success", "Berhasil Absen, Pasti Kamu Anak Rajin:)");
+        }
 
-        session()->flash("success", "Berhasil Absen, Pasti Kamu Anak Rajin:)");
         return redirect()->back();
     }
-
 }

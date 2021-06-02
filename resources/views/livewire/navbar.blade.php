@@ -163,7 +163,12 @@
 
     <nav>
         <div class="logo">
-          <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F1.bp.blogspot.com%2F-TVbL49YNck4%2FVXpkrY7Ac1I%2FAAAAAAAAAHs%2Foas2IDk6aGc%2Fs1600%2FLogo-SMK.jpg&f=1&nofb=1" alt="logo sekolah" width="50px">
+            @if($this->photo !== null)
+                <img class="rounded-circle" src="{{asset("storage/photo_profiles/" . $photo)}}" alt="logo sekolah" width="100px">
+            @else
+                <img class="rounded-circle" src="https://3.bp.blogspot.com/-Kv4fzQbhnW4/XD0uqAA-SFI/AAAAAAAAReA/Px33aCTsovwFp36mx9Q7RDeGwXATv92rQCLcBGAs/s1600/SMK%2BBisa%2BV3.png" alt="logo sekolah" width="100px">
+            @endif
+
         </div>
         <ul>
             @auth
@@ -205,11 +210,9 @@
           <span></span>
         </div>
     </nav>
-
     <script>
         const menuToggle= document.querySelector(".menu-bars");
         const nav = document.querySelector("nav ul");
-        const list_li = document.getElementsByTagName("li");
 
         menuToggle.addEventListener("click", () => {
             nav.classList.toggle("slide");

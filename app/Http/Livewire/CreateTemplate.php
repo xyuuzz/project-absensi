@@ -31,12 +31,14 @@ class CreateTemplate extends Component
         if($this->status === "teacher")
         {
             $this->createTeacher($user);
+            $status = "teacher";
         } else {
             $this->createStudent($user);
+            $status = "student";
         }
 
         $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
-        $this->emit("successCreated");
+        $this->emit("successCreated", $status);
     }
 
     protected function createUser()
@@ -54,7 +56,7 @@ class CreateTemplate extends Component
             "jenis_kelamin" => $this->jenis_kelamin,
         ]);
     }
-    
+
     protected function createTeacher($user)
     {
         $this->validate([

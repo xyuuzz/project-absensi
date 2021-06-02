@@ -5,6 +5,9 @@
             .mt-smm-2 {
                 margin-top: 10px;
             }
+            .d-sm-blockk {
+                display: block;
+            }
         }
     </style>
     <div class="card">
@@ -24,14 +27,28 @@
                 </div>
             @endif
 
-            <button wire:click='createView()' type="button" class="btn btn-sm btn-secondary">
-                {{$view === "index" ? "Buat Anggota Siswa" : "Lihat Daftar Siswa"}}
-            </button>
+            <div class="d-lg-flex justify-content-between mb-3">
+                <button wire:click='createView()' type="button" class="btn btn-sm btn-secondary">
+                    {{$view === "index" ? "Buat Anggota Siswa" : "Lihat Daftar Siswa"}}
+                </button>
+                @if($view !== "link")
+                    <div class="d-lg-flex justify-content-between">
+                        <button wire:click='linkView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2 mr-lg-3">
+                            Buat Link Pendaftaran Siswa
+                        </button>
+                        <button wire:click='linkView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2">
+                            Daftar Link Yang Telah Dibuat
+                        </button>
+                    </div>
+                @endif
+            </div>
             @if($view === "index")
                 @include("partials.index_template")
             @elseif($view === "create")
                 {{-- @include ("partials.create_template") --}}
                 @livewire("create-template", ["status" => "student"])
+            @elseif($view === "link")
+                <livewire:make-link-register/>
             @else
                 @livewire("edit-template", ["status" => "student"])
             @endif
