@@ -8,8 +8,12 @@ use App\Models\{Classes};
 
 class MakeLinkRegister extends Component
 {
-    public $class, $dimulai, $berakhir;
+    public $class, $dimulai, $berakhir, $mapel, $status;
     public $nama_link = '';
+
+    public function mount($status) {
+        $this->status = $status;
+    }
 
     public function render()
     {
@@ -36,15 +40,12 @@ class MakeLinkRegister extends Component
             "nama_link" => "string"
         ]);
 
-        Auth::user()->register_students()->create([
-            "classes_id" => Classes::firstWhere("class", $this->class)->id,
-            "dimulai" => $this->dimulai,
-            "berakhir" => $this->berakhir,
-            "slug" => Auth::user()->name . "-" . uniqid()
-        ]);
+        // create data
+        $data_create = $this->status === "teacher" ? $this->teacher() : $this->student();
 
         $this->resetInput();
-        $this->emit("successCreated", "link");
+        session()->flash("success", "Berhasil Membuat Link Register " . $this->status === "teacher" ? "Guru" : "Siswa");
+        return redirect(route("list_link_register", ["status" => $this->status]));
     }
 
     protected function resetInput()
@@ -54,4 +55,27 @@ class MakeLinkRegister extends Component
         $this->berakhir = '';
         $this->nama_link = '';
     }
+
+    protected function student()
+    {
+        $create = Auth::user()->register_students()->create([
+            "classes_id" => Classes::firstWhere("class", $this->class)->id,
+            "dimulai" => $this->dimulai,
+            "berakhir" => $this->berakhir,
+            "slug" => $this->nama_link === "" ? Auth::user()->name . "-" . uniqid() : \Str::slug($this->nama_link)
+        ]);
+        return $create;
+    }
+
+    protected function teacher()
+    {
+        $create = Auth::user()->register_teacher()->create([
+            "mapel" => $this->mapel,
+            "dimulai" => $this->dimulai,
+            "berakhir" => $this->berakhir,
+            "slug" => $this->nama_link === "" ? Auth::user()->name . "-" . uniqid() : \Str::slug($this->nama_link)
+        ]);
+        return $create;
+    }
+
 }

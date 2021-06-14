@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\{Student, Teacher, RegisterStudent};
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\{Student, Teacher, RegisterStudent, RegisterTeacher};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -58,5 +58,10 @@ class User extends Authenticatable
     public function register_students()
     {
         return $this->hasMany(RegisterStudent::class);
+    }
+
+    public function register_teacher()
+    {
+        return $this->hasMany(RegisterTeacher::class);
     }
 }

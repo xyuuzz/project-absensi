@@ -80,7 +80,7 @@ class CreateTemplate extends Component
         $user->student()->create([
             "no_absen" => $this->no_absen,
             "classes_id" => Classes::firstWhere("class", $this->class)->id,
-            "photo_profile" => "foto-profil.png",
+            "photo_profile" => "foto-profil.jpeg",
             "nis" => $this->nis,
             "nisn" => $this->nisn
         ]);

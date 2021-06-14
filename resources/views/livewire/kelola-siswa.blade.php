@@ -27,28 +27,21 @@
                 </div>
             @endif
 
-            <div class="d-lg-flex justify-content-between mb-3">
-                <button wire:click='createView()' type="button" class="btn btn-sm btn-secondary">
-                    {{$view === "index" ? "Buat Anggota Siswa" : "Lihat Daftar Siswa"}}
-                </button>
-                @if($view !== "link")
-                    <div class="d-lg-flex justify-content-between">
-                        <button wire:click='linkView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2 mr-lg-3">
-                            Buat Link Pendaftaran Siswa
-                        </button>
-                        <button wire:click='linkView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2">
-                            Daftar Link Yang Telah Dibuat
-                        </button>
-                    </div>
+            <div class="d-lg-flex justify-content-between mb-2">
+                @if($view === "index")
+                    <a class="btn btn-sm btn-success d-sm-blockk mt-smm-2 mr-lg-3" href="{{ route("make_link_register", ["status" => "student"]) }}">Buat Link Pendaftaran Siswa</a>
+                    <a class="btn btn-sm btn-success d-sm-blockk mt-smm-2 mr-lg-3" href="{{ route("list_link_register", ["status" => "student"]) }}">List Link Pendaftaran Siswa</a>
+                @else
+                    <button wire:click='indexView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2 mr-lg-3">
+                        Kembali
+                    </button>
                 @endif
+                    {{-- <button wire:click='linkView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2 ">
+                        Daftar Link Yang Telah Dibuat
+                    </button> --}}
             </div>
             @if($view === "index")
                 @include("partials.index_template")
-            @elseif($view === "create")
-                {{-- @include ("partials.create_template") --}}
-                @livewire("create-template", ["status" => "student"])
-            @elseif($view === "link")
-                <livewire:make-link-register/>
             @else
                 @livewire("edit-template", ["status" => "student"])
             @endif
@@ -56,3 +49,7 @@
     </div>
 
 </div>
+
+{{-- <button wire:click='createView()' type="button" class="btn btn-sm btn-secondary">
+{{$view === "index" ? "Buat Anggota Siswa" : "Lihat Daftar Siswa"}}
+</button> --}}

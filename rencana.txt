@@ -1,0 +1,7 @@
+jadi ini adalah rencana kedepan,
+buat guru dan siswa akan dihilangkan..
+dan diganti oleh link siswa dan guru
+
+jika guru ingin membuat absen tetapi sudah lebih dari jam 12.30 atau jam absensi terakhir, maka nanti system akan secara otomatis memberitahukan bahwa absensi yang akan dibuat akan berlaku pada hari esok bukan hari ini
+
+untuk list absensi tambahkan filter pencarian menurut tanggal nya dan default nya adalah hari ini.

@@ -6,7 +6,6 @@ use App\Models\Classes;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\{Student, User};
-use Illuminate\Support\Facades\Hash;
 
 class KelolaSiswa extends Component
 {
@@ -50,26 +49,19 @@ class KelolaSiswa extends Component
         return view('livewire.kelola-siswa', compact("status", "kumpulan_data"));
     }
 
-    public function createView()
+    public function editView($siswa)
     {
-        $this->name=""; $this->email=""; $this->nis=""; $this->nisn=""; $this->password=""; $this->class=""; $this->no_absen=""; $this->jenis_kelamin="";
-        if($this->view == "index")
-        {
-            $this->view = "create";
+        if($this->view !== "edit") {
+            $this->view = "edit";
+            $this->emit("editData", $siswa);
         } else {
             $this->view = "index";
         }
     }
 
-    public function editView($siswa)
+    public function indexView()
     {
-        $this->view = "edit";
-        $this->emit("editData", $siswa);
-    }
-
-    public function linkView()
-    {
-        $this->view = "link";
+        $this->view = "index";
     }
 
     public function deleteData($user_id)
@@ -108,13 +100,4 @@ class KelolaSiswa extends Component
         $kata = $status === "teacher" ? "Guru" : "Siswa";
         session()->flash("success", "Berhasil Mensunting Data $kata");
     }
-
-    // protected function send_mail($status, $action)
-    // {
-    //     if($status === "link")
-    //     {
-    //         return "Berhasil Membuat Link Register Untuk Siswa";
-    //     }
-    //     return "Berhasil " . $action ===
-    // }
 }

@@ -54,14 +54,6 @@
 
 </div>
 
-    {{-- <script>
-        $("#liveToastBtn").on("click", () => $("#liveToast").toast("show"));
-        // document.querySelector("#liveToastBtn").addEventListener("click", () => {
-        //     document.querySelector("#liveToast").addEventListener("show");
-        // })
-    </script>  --}}
-
-
 
 {{-- CARA UNTUK VALIDASI SCHEDULE UNTUK SISWA --}}
 {{-- @if($list_absensi[0]->schedule->dimulai < date("H:i:s"))

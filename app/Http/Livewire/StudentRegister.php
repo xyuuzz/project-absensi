@@ -2,13 +2,18 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\{User, Student};
 use Livewire\Component;
+use App\Models\{User, Student, Classes};
 use Illuminate\Support\Facades\Hash;
 
 class StudentRegister extends Component
 {
-    public $name, $email, $password, $jenis_kelamin, $no_absen;
+    public $name, $email, $password, $jenis_kelamin, $no_absen, $class;
+
+    public function mount(Classes $classes)
+    {
+        $this->class = $classes->class;
+    }
 
     public function render()
     {
@@ -17,13 +22,16 @@ class StudentRegister extends Component
 
     public function createForm()
     {
-
-        if(Student::where("no_absen", $this->no_absen)) {
-            session()->flash("failure_no_absen", "Absent Number Already Used");
+        if(Student::where("no_absen", $this->no_absen)->count()) {
+            $this->addError("no_absen", "Absent Number Already Used");
+            // session()->flash("failure_no_absen", "Absent Number Already Used");
             return redirect()->back();
         }
-        Student::create([
 
+        Student::create([
+            "no_absen" => $this->no_absen,
+            "classes_id" => $this->class->id,
+            "photo_profile" => "foto-profil.jpeg",
         ]);
 
         return User::create([
