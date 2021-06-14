@@ -3,12 +3,14 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\{User, Student, Classes};
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\{User, Student, Classes};
 
 class StudentRegister extends Component
 {
-    public $name, $email, $password, $jenis_kelamin, $no_absen, $class;
+    public $name, $email, $password, $no_absen, $class;
+    public $jenis_kelamin = "Laki-Laki";
 
     public function mount(Classes $classes)
     {
@@ -28,18 +30,22 @@ class StudentRegister extends Component
             return redirect()->back();
         }
 
-        Student::create([
-            "no_absen" => $this->no_absen,
-            "classes_id" => $this->class->id,
-            "photo_profile" => "foto-profil.jpeg",
-        ]);
 
-        return User::create([
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
             "role" => "student",
             "jenis_kelamin" => $this->jenis_kelamin
         ]);
+
+        $user->student()->create([
+            "no_absen" => $this->no_absen,
+            "classes_id" => Classes::firstWhere("class", $this->class)->id,
+            "photo_profile" => "foto-profil.png",
+        ]);
+
+        Auth::login($user);
+        return redirect(route("home"));
     }
 }

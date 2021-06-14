@@ -2,8 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\{RegisterStudent, RegisterTeacher};
+use App\Http\Livewire\StudentRegister;
 use Livewire\{Component, WithPagination};
+use App\Models\{RegisterStudent, RegisterTeacher};
 
 class ListLinkRegister extends Component
 {
@@ -25,19 +26,10 @@ class ListLinkRegister extends Component
         return view('livewire.list-link-register', compact("model"));
     }
 
-    public function setItem($item1, $item2) {
-        $this->item1 = $item1;
-        $this->item2 = $item2;
+    public function deleteData($id)
+    {
+        $this->status === "Guru" ? RegisterTeacher::find($id)->delete() : RegisterStudent::find($id)->delete();
+        session()->flash("success", "Data " . $this->status === "Guru" ? "Guru" : "Siswa" . " Berhasil Dihapus!");
     }
 
-    public function setLink()
-    {
-        // dd($this->item1);
-        if($this->status === "Guru") {
-            $link_copy = route("register_teacher", ["mapel" => $this->item1, "register_teacher" => $this->item2]);
-        } else {
-            $link_copy = route("register_student", ["classes" => $this->item1, "register_student" => $this->item2]);
-        }
-        return $link_copy;
-    }
 }

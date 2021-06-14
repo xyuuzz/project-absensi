@@ -44,7 +44,7 @@ class MakeLinkRegister extends Component
         $data_create = $this->status === "teacher" ? $this->teacher() : $this->student();
 
         $this->resetInput();
-        session()->flash("success", "Berhasil Membuat Link Register " . $this->status === "teacher" ? "Guru" : "Siswa");
+        session()->flash("success", "Berhasil Membuat Link Register");
         return redirect(route("list_link_register", ["status" => $this->status]));
     }
 

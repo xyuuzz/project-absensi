@@ -45,14 +45,12 @@
             @if(request()->routeIs("login") || request()->routeIs("register"))
                 @yield('content')
             @endif
-
-            @auth
+            @if(request()->routeIs("register_student") || request()->routeIs("register_teacher") || Auth::check())
                 {{$slot}}
-            @endauth
-
+            @endif
             @auth
-            @yield("gelombang_footer")
-        @endauth
+                @yield("gelombang_footer")
+            @endauth
         </main>
     </div>
 

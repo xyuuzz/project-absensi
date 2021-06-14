@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\{Auth, Route};
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Middleware\{Admin, ForTeacher, ForStudents};
 use App\Http\Livewire\{KelolaSiswa, Home, Profile, Absensi, BuatAbsensi, KelolaGuru, ListAbsensi, ListKelas, StudentRegister, TeacherRegister, ListLinkRegister, MakeLinkRegister};
 
