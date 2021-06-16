@@ -1,7 +1,7 @@
 <div class="d-lg-flex justify-content-between">
     <h4 class="mt-3 mb-3"><b>{{$status === "teacher" ? "Guru" : "Siswa"}} Yang Terdaftar : </b></h4>
-    <div class="">
-    <form class="form-inline my-2 my-lg-0">
+    <div class="mt-2">
+    <form class="form-inline my-2 my-lg-0 ">
         @if($status === "teacher")
             <input wire:model='search' class="form-control mr-sm-2" type="search" placeholder="Cari Berdasarkan {{$s_based_on == "name" || $s_based_on == null ? "Nama" : "Mapel"}}" aria-label="Search">
         @elseif($status === "student")
@@ -11,7 +11,7 @@
     </form>
     <div class="mb-3 d-block mt-2">
         <span>Cari Berdasarkan : </span>
-        <span wire:click='cari_berdasarkan("name")' class="btn btn-sm {{$s_based_on == "name" || $s_based_on == null ? "btn-warning" : "btn-secondary"}}">Nama</span>
+        <span wire:click='cari_berdasarkan("name")' class="btn btn-sm {{$s_based_on == "name" || $s_based_on == null ? "btn-warning" : "btn-secondary"}} ">Nama</span>
         @if($status === "teacher")
             <span  wire:click='cari_berdasarkan("mapel")' class="btn btn-sm {{$s_based_on == "mapel" ? "btn-warning" : "btn-secondary"}}">Mapel</span>
         @elseif($status === "student")
@@ -60,9 +60,10 @@
                         <span wire:click='editView({{$data->id}})' class="btn btn-sm btn-outline-info mt-smm-2">Edit</span>
                     </td>
             </tr>
-            @if($status === "teacher")
+            @if($status === "teacher") {{-- untuk student tidak diberi index karena index nomor nya adalah nomor absen siswa --}}
                 <?php $index++; ?> {{-- Increment index untuk no table --}}
             @endif
+
             @endif
             @endforeach
         </tbody>

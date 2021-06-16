@@ -5,6 +5,11 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if(session("danger"))
+                <div class="alert alert-success mt-3" role="alert">
+                    {{session("danger")}}
+                </div>
+            @endif
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
@@ -58,11 +63,11 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
+                                {{-- @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </form>

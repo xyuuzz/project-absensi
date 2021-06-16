@@ -45,7 +45,7 @@ class Profile extends Component
         // after validate
         if($this->photo)
         {
-            if(Auth::user()->photo_profile !== "foto-profil.jpeg")
+            if(Auth::user()->photo_profile !== "foto-profil.png")
             {
                 Storage::delete("public/photo_profiles/" . Auth::user()->student->photo_profile);
             }

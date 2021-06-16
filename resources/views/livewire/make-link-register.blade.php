@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header ">
             <h4 class="mt-3 mb-3 d-inline-block"><b>Lengkapi Formulir Untuk Membuat Link Register {{ $status === "teacher" ? "Guru" : "Siswa"}}</b></h4>
-            <a class="d-inline-block btn btn-sm btn-secondary mr-lg-3 float-lg-right mt-2" href="{{ route("kelola_siswa") }}">Kembali Ke List Siswa</a>
+            <a class="d-inline-block btn btn-sm btn-secondary mr-lg-3 float-lg-right mt-2" href="{{ route("list_link_register", ["status" => $status]) }}">Kembali</a>
         </div>
         <div class="card-body">
             <form wire:submit.prevent='createForm' class="mt-3">
@@ -25,7 +25,7 @@
 
                 <div class="form-group">
                     <label for="dimulai">Link Akan Aktif Pada : </label>
-                    <input required  id="dimulai" type="date" class="form-control" wire:model="dimulai" >
+                    <input id="dimulai" type="text" class="form-control" value="{{ date("m / d / Y") }}" disabled>
                     @error('dimulai') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror
                 </div>
 

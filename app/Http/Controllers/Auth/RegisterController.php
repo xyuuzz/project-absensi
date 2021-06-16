@@ -66,7 +66,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return redirect(route("login"));
-        
+
         if(Student::where("no_absen", $data["no_absen"])) {
             session()->flash("failure_no_absen", "Absent Number Already Used");
             return redirect()->back();

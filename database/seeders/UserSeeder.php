@@ -22,20 +22,6 @@ class UserSeeder extends Seeder
                 "role" => "admin",
                 "password" => Hash::make("maulanayusuf"),
                 "jenis_kelamin" => "Laki-Laki"
-            ],
-            [
-                "name" => "bagus",
-                "email" => "sukabagus@gmail.com",
-                "role" => "teacher",
-                "password" => Hash::make("sukabagus"),
-                "jenis_kelamin" => "Laki-Laki"
-            ],
-            [
-                "name" => "nanakana",
-                "email" => "kananana1212@gmail.com",
-                "role" => "student",
-                "password" => Hash::make("nanakana"),
-                "jenis_kelamin" => "Laki-Laki"
             ]
         ]);
 

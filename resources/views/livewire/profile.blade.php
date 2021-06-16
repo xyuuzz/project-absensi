@@ -27,8 +27,8 @@
                   <small id="emailHelp" class="form-text text-muted"><b>Nama</b> Tidak Bisa diubah, jika ada salah penulisan silahkan hubungi admin</small>
                 </div>
                 <div class="form-group">
-                  <label for="kelas">Kelas</label>
-                  <input type="text" class="form-control" value="{{Auth::user()->student->classes->class}}" readonly>
+                  <label for="kelas">Kelas / No Absen</label>
+                  <input type="text" class="form-control" value="{{Auth::user()->student->classes->class}} / {{ Auth::user()->student->no_absen }}" readonly>
                   <small id="emailHelp" class="form-text text-muted"><b>Kelas</b> Tidak Bisa diubah, jika ada salah penulisan silahkan hubungi admin</small>
                 </div>
                 <div class="form-group">

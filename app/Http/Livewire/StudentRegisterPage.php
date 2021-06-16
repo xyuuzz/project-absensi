@@ -3,30 +3,42 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\{User, Student, Classes};
+use Illuminate\Support\Facades\{Hash, Auth};
+use App\Models\{User, Student, Classes, RegisterStudent};
 
-class StudentRegister extends Component
+class StudentRegisterPage extends Component
 {
     public $name, $email, $password, $no_absen, $class;
     public $jenis_kelamin = "Laki-Laki";
 
-    public function mount(Classes $classes)
+    public function mount(RegisterStudent $register_student)
     {
-        $this->class = $classes->class;
+        $this->class = $register_student->classes->class;
+
+        if(date("Y-m-d H:i:s") < $register_student->dimulai) // jika waktu sekarang kurang dari dimulai
+        {
+            session()->flash("danger", "Link Absensi Belum Dibuka!");
+            return redirect(route("login"));
+        } elseif(date("Y-m-d H:i:s") > $register_student->dimulai && date("Y-m-d H:i:s") < $register_student->berakhir)
+        {
+            // jika waktu sekarang diantara dimulai dan berakhir
+            $this->status = "Sedang Berlangsung";
+        } else { // jika waktu sekarang lebih dari berakhir
+            session()->flash("danger", "Link Absensi Sudah Ditutup!");
+            return redirect(route("login"));
+        }
+
     }
 
     public function render()
     {
-        return view('livewire.student-register');
+        return view('livewire.student-register-page');
     }
 
     public function createForm()
     {
         if(Student::where("no_absen", $this->no_absen)->count()) {
             $this->addError("no_absen", "Absent Number Already Used");
-            // session()->flash("failure_no_absen", "Absent Number Already Used");
             return redirect()->back();
         }
 

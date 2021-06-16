@@ -41,12 +41,19 @@ class KelolaGuru extends Component
         // jika user mencari guru/ ada huruf pada input search
         if(strlen($this->search)) {
             $kumpulan_data = $this->s_based_on == null || $this->s_based_on == "name" ?
-                            array_map(function($user) {
-                                return Teacher::where("user_id", $user["id"])->first();
-                            }, User::where("role", "teacher")->where("name", "like", "%{$this->search}%")->get()->toArray())
-                        : Teacher::where("mapel", "like", "%{$this->search}%")->get();
-            // desk : jika $s_based_on adalah null atau name, maka cari guru berdasarkan name dengan query yang diinputkan admin, namun jika $s_based_on nya adalah mapel, maka cari guru berdasarkan mapel dengan query yang diinputkan admin
+                            // ketika mencari berdasarkan nama maka :
+                array_map(
+                    function($user) {
+                        return Teacher::where("user_id", $user["id"]) // dapatlam user seusai
+                                ->first();
+                    }, User::where("role", "teacher") // cari user yang role nya teacher
+                    ->where("name", "like", "%{$this->search}%") // cari yang namanya sama seperti keyword
+                    ->get() // dapatkan semua
+                    ->toArray()) // ubah menjadi array, lalu masukan nilainya satu persatu ke dalam function diatas.
+            : Teacher::where("mapel", "like", "%{$this->search}%")->get();
+            // ketika mencari berdasarkan mapel.
         }
+            // desk : jika $s_based_on adalah null atau name, maka cari guru berdasarkan name dengan query yang diinputkan admin, namun jika $s_based_on nya adalah mapel, maka cari guru berdasarkan mapel dengan query yang diinputkan admin
 
         $index = 1;
         $status = "teacher";

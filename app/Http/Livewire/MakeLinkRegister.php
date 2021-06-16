@@ -17,6 +17,7 @@ class MakeLinkRegister extends Component
 
     public function render()
     {
+        $this->dimulai = date("m-d-y");
         return view('livewire.make-link-register');
     }
 
@@ -35,13 +36,14 @@ class MakeLinkRegister extends Component
 
         $this->validate([
             "class" => "required|string",
-            "dimulai" => "date|required",
             "berakhir" => "date|required",
-            "nama_link" => "string"
+            "nama_link" => "string|unique:register_students,slug"
+        ], [
+            "nama_link.unique" => "Nama Link Sudah Dipakai!"
         ]);
 
         // create data
-        $data_create = $this->status === "teacher" ? $this->teacher() : $this->student();
+        $this->create_student();
 
         $this->resetInput();
         session()->flash("success", "Berhasil Membuat Link Register");
@@ -56,22 +58,11 @@ class MakeLinkRegister extends Component
         $this->nama_link = '';
     }
 
-    protected function student()
+    protected function create_student()
     {
         $create = Auth::user()->register_students()->create([
             "classes_id" => Classes::firstWhere("class", $this->class)->id,
-            "dimulai" => $this->dimulai,
-            "berakhir" => $this->berakhir,
-            "slug" => $this->nama_link === "" ? Auth::user()->name . "-" . uniqid() : \Str::slug($this->nama_link)
-        ]);
-        return $create;
-    }
-
-    protected function teacher()
-    {
-        $create = Auth::user()->register_teacher()->create([
-            "mapel" => $this->mapel,
-            "dimulai" => $this->dimulai,
+            "dimulai" => date("Y-m-d"),
             "berakhir" => $this->berakhir,
             "slug" => $this->nama_link === "" ? Auth::user()->name . "-" . uniqid() : \Str::slug($this->nama_link)
         ]);

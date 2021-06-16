@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\{Auth, Route};
 use App\Http\Middleware\{Admin, ForTeacher, ForStudents};
-use App\Http\Livewire\{KelolaSiswa, Home, Profile, Absensi, BuatAbsensi, KelolaGuru, ListAbsensi, ListKelas, StudentRegister, TeacherRegister, ListLinkRegister, MakeLinkRegister};
+use App\Http\Livewire\{KelolaSiswa, Home, Profile, Absensi, BuatAbsensi, KelolaGuru, ListAbsensi, ListKelas, StudentRegisterPage, ListLinkRegister, MakeLinkRegister};
 
 Route::get('/', function () {
     return redirect(route("login"));
@@ -10,10 +10,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware("guest")->prefix("register")->group(function() {
-    Route::get("siswa/{classes:class}/{register_student:slug}", StudentRegister::class)->name("register_student");
-    Route::get("guru/{mapel}/{register_teacher:slug}", TeacherRegister::class)->name("register_teacher");
-});
+Route::get("register/siswa/{register_student:slug}", StudentRegisterPage::class)->middleware("guest")->name("register_student");
 
 Route::middleware(['auth'])->group(function () {
     Route::get("home", Home::class)->name("home");

@@ -22,9 +22,14 @@
                     <div class="row justify-content-center">
                         <div class="col-11">
                             <p><b>
-                                <span>Halo </span>
-                                <span style="font-size: 20px; color: blue;">{{Str::upper(Auth::user()->name)}}</span><br>
-                                <span>Selamat Datang,</span>
+                                <span style="font-size: 20px; color: blue;"> Halo
+                                    {{ Auth::user()->role === "teacher" ? (Auth::user()->jenis_kelamin === "Laki-Laki" ? "Pak" : "Bu") : "" }}
+                                    {{ Str::upper(Auth::user()->name) }}
+                                </span>
+                                @if(!Auth::user()->role === "admin")
+                                    <br>
+                                    <span>Selamat {{ Auth::user()->role === "teacher" ? "Mengajar " : "Belajar!" }}</span>
+                                @endif
                                 <br>
                                 <span>Semoga Harimu Menyenangkan</span>
                             </b></p>
@@ -55,8 +60,6 @@
                     }
                 });
             });
-
-
             window.setTimeout("waktu1()", 1000);
             function waktu1() {
                 var waktu1 = new Date();

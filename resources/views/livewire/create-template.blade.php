@@ -3,12 +3,13 @@
     <form wire:submit.prevent='createForm' class="mt-3">
         <div class="form-group">
             <label for="name">Nama {{$status === "teacher" ? "Guru" : "Siswa"}}</label>
-            <input required  id="name" type="text" class="form-control" wire:model="name" placeholder="Masukan Nama Siswa" >
+            <input required  id="name" type="text" class="form-control" wire:model="name"
+            placeholder="Masukan Nama {{ $status === "teacher" ? "Guru" : "Siswa"}}" >
             @error('name') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input required  id="email" type="email" class="form-control" wire:model="email" placeholder="Masukan Email Siswa" >
+            <input required  id="email" type="email" class="form-control" wire:model="email" placeholder="Masukan Email {{ $status === "teacher" ? "Guru" : "Siswa"}}" >
             @error('email') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror
         </div>
         <div class="form-group">
@@ -69,9 +70,6 @@
     </form>
 
     <script>
-        document.getElementsByTagName("input")[5].addEventListener("input", function() {
-            console.log("{{$nis}}");
-        });
         const jenis_kelamin = document.getElementById("jenis_kelamin");
             jenis_kelamin.addEventListener("change", function() {
                 @this.set("jenis_kelamin", jenis_kelamin.value);

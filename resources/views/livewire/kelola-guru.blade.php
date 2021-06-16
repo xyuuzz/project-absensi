@@ -31,10 +31,10 @@
                 @include("partials.index_template")
             @elseif($view === "create")
                 {{-- <livewire:create-template :status='teacher'/> --}}
-                @livewire("create-template", ["status" => "teacher"])
+                @livewire("create-template", ["status" => $status])
             @else
                 {{-- <livewire:edit-guru/> --}}
-                @livewire("edit-template", ["status" => "teacher"])
+                @livewire("edit-template", ["status" => $status])
             @endif
         </div>
     </div>

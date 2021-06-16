@@ -6,7 +6,7 @@
             <a href="{{ route("make_link_register", ["status" => "student"]) }}" class="btn btn-sm float-right btn-success">Buat Link Register</a>
         </div>
         <div class="card-body">
-            
+
             @if(session("success"))
                 <div class="alert alert-success mt-3 col-lg-4" role="alert">
                     {{session("success")}}
@@ -40,7 +40,7 @@
                                         {{
                                             $status === 'Guru' ?
                                             route('register_teacher', ['mapel' => $item->mapel, 'register_teacher' => $item->slug] ) :
-                                            route('register_student', ['classes' => $item->classes->class, 'register_student' => $item->slug])
+                                            route('register_student', ['register_student' => $item->slug])
                                         }}"
                                     class="copyText" hidden>
                                 </td>

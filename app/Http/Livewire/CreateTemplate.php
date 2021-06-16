@@ -20,6 +20,7 @@ class CreateTemplate extends Component
     {
         $this->status = $status;
     }
+
     public function render()
     {
         return view('livewire.create-template');
@@ -27,26 +28,32 @@ class CreateTemplate extends Component
 
     public function createForm()
     {
-        $user = $this->createUser();
-        if($this->status === "teacher")
+        $user = $this->createUser(); // panggil method untuk membuat field user
+        if($this->status === "teacher")  // jika status nya adalah teacher,
         {
-            $this->createTeacher($user);
+            $this->createTeacher($user); // panggil method untuk membuat field user
             $status = "teacher";
-        } else {
-            $this->createStudent($user);
+        } else { // jika tidak
+            $this->createStudent($user); // panggil method untuk membuat field student
             $status = "student";
         }
 
-        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
+        $this->resetInput();
         $this->emit("successCreated", $status);
     }
 
     protected function createUser()
     {
         $this->validate([
-            "name" => "required|string|min:5",
+            "name" => "required|string|min:5|max:40",
             "email" => "required|email|max:50|unique:users",
             "password" => "min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|",
+        ], [
+            "name.min" => "Minimal 5 Huruf",
+            "email.max" => "Maximal 50 Huruf",
+            "email.unique" => "Email Sudah Dipakai",
+            "password.min" => "Minimal 6 Huruf",
+            "password.regex" => "Gunakan Password Yang Kuat!! Contoh : MaulanaYusuf12_$$"
         ]);
         return $user = User::create([
             "name" => $this->name,
@@ -90,5 +97,9 @@ class CreateTemplate extends Component
             session()->flash("errorNoAbsen", "No Absen Sudah Dipakai!");
             return redirect()->back();
         }
+    }
+
+    protected function resetInput() {
+        $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password="";
     }
 }

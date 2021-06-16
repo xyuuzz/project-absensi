@@ -57,15 +57,19 @@
                             <select id="sche">
                                 <option>Pilih Jam Absensi Dibawah</option>
                                 @foreach($schedule as $sch)
-                                <option value="{{$sch->id}}" class='form-check-input'>{{$sch->dimulai}} -  {{$sch->berakhir}} WIB</option>
+                                    <option value="{{$sch->id}}" class='form-check-input'>{{$sch->dimulai}} -  {{$sch->berakhir}} WIB</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-                {{-- <b><p id="list_kelas">Kelas : </p></b> --}}
                 <hr>
-                <button type="submit" class="btn btn-primary">Buat</button>
+                @if(date("H-i-s") > "12-30")
+                    <button type="submit" class="btn btn-primary" disabled>Buat</button>
+                    <small class='d-block mt-2'>Melebihi Jadwal Jam Absensi Terakhir, Silahkan Buat Absensi Besok!</small>
+                @else
+                    <button type="submit" class="btn btn-primary">Buat</button>
+                @endif
             </form>
 
             @if(session("success"))
@@ -80,31 +84,27 @@
 </div>
 
 <script>
-    // const desk_kelas = document.getElementById("list_kelas");
-    // let temp_k = [];
     document.addEventListener("livewire:load", function() {
-        const sche = document.getElementById("sche");
-        let temp = [];
-        const v_kelas = document.querySelectorAll("input.form-check-input");
+        const sche = document.getElementById("sche"); // mendapatkan element dengan id sche => schedule => jadwal
+        let temp = []; // variabel untuk menyimpan
+        const v_kelas = document.querySelectorAll("input.form-check-input"); // mendapatkan semua element input dengan class form-check-input
 
-        v_kelas.forEach(function(kelas) {
-            kelas.addEventListener("change", () => {
-                if(temp.indexOf(kelas.value) === -1 )
+        v_kelas.forEach(function(kelas) { // pertama kita looping class nya
+            kelas.addEventListener("change", () => {  // lalu jika ada input class yang berubah nilainya(dicentang/ tidak jadi dicentang)
+                if(temp.indexOf(kelas.value) === -1 ) // jika class nya tidak ada di dalam var temp, maka tambahkan class tsb ke var temp
                 {
                     temp.push(kelas.value);
-                    // temp_k.push(kelas.nextElementSibling.innerHTML);
-                } else
+                } else // namun jika class nya ada di dalam var temp, maka hapus class tersebut dari var temp.
                 {
                     temp.splice(temp.indexOf(kelas.value), 1);
-                    // temp_k.splice(temp_k.indexOf(kelas.value), 1);
                 }
-                // desk_kelas.innerHTML = `Kelas :  ${temp_k.join(", ")}`
             });
         });
 
+        // dapatkan element semua element button dan ambil yang pertama, lalu jika di klik jalankan callback function nya,
         document.getElementsByTagName("button")[0].addEventListener("click", () => {
-            @this.set("list_kelas", temp);
-            @this.set("sche", sche.value);
+            @this.set("list_kelas", temp); // isi var livewire list_kelas dengan temp
+            @this.set("sche", sche.value); // isi var sche dengan value dari var element sche.
         });
     })
 
