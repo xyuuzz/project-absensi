@@ -29,11 +29,6 @@ class KelolaSiswa extends Component
     public function render()
     {
         $kumpulan_data = Student::latest()->simplePaginate(10);
-        // jika tidak ada field pada table siswa
-        if(!Student::count()) {
-            session()->flash("danger", "Tidak Ada Siswa Yang Terdaftar, Silahkan Tambahkan Siswa Dengan Mengisi Form Dibawah");
-            $this->view = "create";
-        }
         // jika user mencari guru/ ada huruf pada input search
         if(strlen($this->search)) {
             $kumpulan_data = $this->s_based_on == null || $this->s_based_on == "name" ?

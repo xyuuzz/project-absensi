@@ -43,12 +43,12 @@
                 </div>
                 <div class="form-group">
                     <label for="nis">NIS</label>
-                    <input id="nis" type="number" class="form-control" placeholder="NIS Siswa" wire:model='nis' value=1212>
+                    <input id="nis" type="text" class="form-control" placeholder="NIS Siswa" wire:model='nis' value=1212>
                     @error('nis') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror
                 </div>
                 <div class="form-group">
                     <label for="nisn">NISN</label>
-                    <input id="nisn" type="number" class="form-control" value="{{Auth::user()->student->nisn}}" placeholder="NISN Siswa" wire:model="nisn">
+                    <input id="nisn" type="text" class="form-control" value="{{Auth::user()->student->nisn}}" placeholder="NISN Siswa" wire:model="nisn">
                     @error('nisn') <span class="error text-danger"><i>{{ $message }}</i></span> @enderror
                 </div>
                 <div class="form-group">

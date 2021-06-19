@@ -36,9 +36,6 @@
                         Kembali
                     </button>
                 @endif
-                    {{-- <button wire:click='linkView()' type="button" class="btn btn-sm btn-success d-sm-blockk mt-smm-2 ">
-                        Daftar Link Yang Telah Dibuat
-                    </button> --}}
             </div>
             @if($view === "index")
                 @include("partials.index_template")

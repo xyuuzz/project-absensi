@@ -40,8 +40,7 @@
         </tr>
         </thead>
         <tbody>
-            @foreach ($kumpulan_data as $data)
-                @if($data)
+            @forelse ($kumpulan_data as $data)
                 <tr>
                     <th scope="row">{{$index ?? $data->no_absen}}</th>
                     <td>{{Str::upper($data->user->name)}}</td>
@@ -64,8 +63,9 @@
                 <?php $index++; ?> {{-- Increment index untuk no table --}}
             @endif
 
-            @endif
-            @endforeach
+            @empty
+                <td colspan="8" class="text-center"><b>Tidak Ada Data Siswa<b></td>
+            @endforelse
         </tbody>
     </table>
 </div>

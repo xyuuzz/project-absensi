@@ -36,7 +36,7 @@ class KelolaGuru extends Component
         // jika tidak ada field pada table guru
         if(!Teacher::count()) {
             session()->flash("danger", "Tidak Ada Guru Yang Terdaftar, Silahkan Buat Guru Dengan Mengisi Form Dibawah");
-            $this->view = "buat_guru";
+            $this->view = "create";
         }
         // jika user mencari guru/ ada huruf pada input search
         if(strlen($this->search)) {
