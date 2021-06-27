@@ -86,9 +86,8 @@
         @endif
         <div class="form-group">
             <label class="pr-3">Jenis Kelamin : </label>
-            <div wire:ignore class="d-inline">
-                <select id='jenis_kelamin'>
-                    <option>Pilih Salah Satu</option>
+            <div class="d-inline">
+                <select class="form-control" wire:model="jenis_kelamin">
                     <option>Laki-Laki</option>
                     <option>Perempuan</option>
                 </select>
@@ -97,12 +96,4 @@
         </div>
         <button type="submit" class="btn btn-info">Sunting</button>
     </form>
-
-    <script>
-        const jenis_kelamin = document.getElementById("jenis_kelamin");
-            jenis_kelamin.addEventListener("change", function() {
-                if(jenis_kelamin.value !== "Pilih Salah Satu") @this.set("jenis_kelamin", jenis_kelamin.value);
-            });
-    </script>
-
 </div>

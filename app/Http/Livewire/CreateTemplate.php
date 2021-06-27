@@ -28,7 +28,7 @@ class CreateTemplate extends Component
 
     public function createForm()
     {
-        $user = $this->createUser(); // panggil method untuk membuat field user
+        $user = $this->createUser($this->status); // panggil method untuk membuat field user
         if($this->status === "teacher")  // jika status nya adalah teacher,
         {
             $this->createTeacher($user); // panggil method untuk membuat field user
@@ -42,7 +42,7 @@ class CreateTemplate extends Component
         $this->emit("successCreated", $status);
     }
 
-    protected function createUser()
+    protected function createUser($status)
     {
         $this->validate([
             "name" => "required|string|min:5|max:40",
@@ -55,10 +55,11 @@ class CreateTemplate extends Component
             "password.min" => "Minimal 6 Huruf",
             "password.regex" => "Gunakan Password Yang Kuat!! Contoh : MaulanaYusuf12_$$"
         ]);
+
         return $user = User::create([
             "name" => $this->name,
             "email" => $this->email,
-            "role" => "student",
+            "role" => $status,
             "password" => Hash::make($this->password),
             "jenis_kelamin" => $this->jenis_kelamin,
         ]);
@@ -68,7 +69,7 @@ class CreateTemplate extends Component
     {
         $this->validate([
             "mapel" => "required|string|max:30",
-            "nign" => "required|string|max:11",
+            "nign" => "required|numeric|unique:teachers|max:99999999999",
         ]);
         // create field teacher
         $user->teacher()->create([

@@ -8,8 +8,7 @@ use App\Models\{User, Student, Classes, RegisterStudent};
 
 class StudentRegisterPage extends Component
 {
-    public $name, $email, $password, $no_absen, $class;
-    public $jenis_kelamin = "Laki-Laki";
+    public $name, $email, $password, $no_absen, $class, $jenis_kelamin, $nisn, $password_confirmation;
 
     public function mount(RegisterStudent $register_student)
     {
@@ -19,7 +18,9 @@ class StudentRegisterPage extends Component
         {
             session()->flash("danger", "Link Absensi Belum Dibuka!");
             return redirect(route("login"));
-        } elseif(date("Y-m-d H:i:s") > $register_student->dimulai && date("Y-m-d H:i:s") < $register_student->berakhir)
+        }
+        elseif
+            (date("Y-m-d H:i:s") > $register_student->dimulai && date("Y-m-d H:i:s") < $register_student->berakhir)
         {
             // jika waktu sekarang diantara dimulai dan berakhir
             $this->status = "Sedang Berlangsung";
@@ -42,22 +43,42 @@ class StudentRegisterPage extends Component
             return redirect()->back();
         }
 
+        $user = $this->createUser();
+        $student = $this->createStudent($user);
 
-        $user = User::create([
+        Auth::login($user);
+        return redirect(route("home"));
+    }
+
+    protected function createUser()
+    {
+        $this->validate([
+            "name" => "required|string|min:3",
+            "email" => "required|string|unique:users|min:5",
+            "password" => "required|string|min:4|confirmed",
+            "password_confirmation" => "required_with:password|same:password|min:4"
+        ]);
+
+        return $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
             "role" => "student",
             "jenis_kelamin" => $this->jenis_kelamin
         ]);
+    }
 
-        $user->student()->create([
+    protected function createStudent($user)
+    {
+        $this->validate([
+            "nisn" => "required|numeric|unique:students"
+        ]);
+
+        return $user->student()->create([
+            "nisn" => $this->nisn,
             "no_absen" => $this->no_absen,
             "classes_id" => Classes::firstWhere("class", $this->class)->id,
             "photo_profile" => "foto-profil.png",
         ]);
-
-        Auth::login($user);
-        return redirect(route("home"));
     }
 }

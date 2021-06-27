@@ -41,20 +41,22 @@
                 @endif
                 <div class="form-group">
                     <label for="">Daftar Kelas</label>
-                    <div class="ml-3 col-lg-4 justify-content-center">
+                    <hr>
+                    <div class="ml-3 overflow-auto" style="height:100px;">
                     @foreach($classes as $kelas)
-                        <div class="d-inline-block">
-                            <input class="form-check-input" type="checkbox" value="{{$kelas->id}}">
+                        <div class="d-block">
+                            <input type="checkbox" value="{{$kelas->id}}">
                             <span class="mr-5">{{$kelas->class}}</span>
                         </div>
                     @endforeach
                     </div>
+                    <hr>
                 </div>
                 <div class="form-group">
                     <label class="d-block">Jam Absensi</label>
                     <div wire:ignore>
                         <div class="d-sm-flexx justify-content-between">
-                            <select id="sche">
+                            <select id="sche" class="form-control" wire:model='sche'>
                                 <option>Pilih Jam Absensi Dibawah</option>
                                 @foreach($schedule as $sch)
                                     <option value="{{$sch->id}}" class='form-check-input'>{{$sch->dimulai}} -  {{$sch->berakhir}} WIB</option>
@@ -64,9 +66,14 @@
                     </div>
                 </div>
                 <hr>
-                @if(date("H-i-s") > "12-30")
+                {{-- {{ dd(date("D") ) }} --}}
+                @if(date("H-i-s") > "12-30" || date("D") === "Sun")
                     <button type="submit" class="btn btn-primary" disabled>Buat</button>
-                    <small class='d-block mt-2'>Melebihi Jadwal Jam Absensi Terakhir, Silahkan Buat Absensi Besok!</small>
+                    @if(date("H-i-s") > "12-30")
+                        <small class='d-block mt-2'>Melebihi Jadwal Jam Absensi Terakhir, Silahkan Buat Absensi Besok!</small>
+                    @else
+                        <small class='d-block mt-2'>Minggu liburr!</small>
+                    @endif
                 @else
                     <button type="submit" class="btn btn-primary">Buat</button>
                 @endif
@@ -85,9 +92,10 @@
 
 <script>
     document.addEventListener("livewire:load", function() {
-        const sche = document.getElementById("sche"); // mendapatkan element dengan id sche => schedule => jadwal
-        let temp = []; // variabel untuk menyimpan
-        const v_kelas = document.querySelectorAll("input.form-check-input"); // mendapatkan semua element input dengan class form-check-input
+        // variabel untuk menyimpan
+        let temp = [];
+        // mendapatkan semua element input dengan class form-check-input
+        const v_kelas = document.querySelectorAll("input.form-check-input");
 
         v_kelas.forEach(function(kelas) { // pertama kita looping class nya
             kelas.addEventListener("change", () => {  // lalu jika ada input class yang berubah nilainya(dicentang/ tidak jadi dicentang)
@@ -98,13 +106,8 @@
                 {
                     temp.splice(temp.indexOf(kelas.value), 1);
                 }
+                @this.set("list_kelas", temp);
             });
-        });
-
-        // dapatkan element semua element button dan ambil yang pertama, lalu jika di klik jalankan callback function nya,
-        document.getElementsByTagName("button")[0].addEventListener("click", () => {
-            @this.set("list_kelas", temp); // isi var livewire list_kelas dengan temp
-            @this.set("sche", sche.value); // isi var sche dengan value dari var element sche.
         });
     })
 

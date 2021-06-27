@@ -22,10 +22,7 @@
 
     @if(!request()->routeIs("login"))
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
+
         body {
             background-color: rgb(181, 179, 179);
         }
@@ -45,6 +42,7 @@
             @if(request()->routeIs("login") || request()->routeIs("register"))
                 @yield('content')
             @endif
+
             @if(request()->routeIs("register_student") || request()->routeIs("register_teacher") || Auth::check())
                 {{$slot}}
             @endif

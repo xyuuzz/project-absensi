@@ -1,4 +1,4 @@
-@section("title", "Register")
+@section("title", "Register Student")
 
 <div class="container">
 
@@ -46,6 +46,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">NISN</label>
+
+                            <div class="col-md-6">
+                                <input wire:model='nisn' id="email" type="text" class="form-control @error('email') is-invalid @enderror" required >
+
+                                @error('nisn')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">Alamat Email</label>
 
                             <div class="col-md-6">
@@ -63,7 +77,7 @@
                             <label for="jenis_kelamin" class="col-md-4 col-form-label text-md-right">Jenis Kelamin</label>
 
                             <div class="col-md-6">
-                                <select id="jenis_kelamin" wire:ignore class="form-group">
+                                <select wire:model="jenis_kelamin" class="form-control">
                                     <option>Laki-Laki</option>
                                     <option>Perempuan</option>
                                 </select>
@@ -93,7 +107,7 @@
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Konfirmasi Password</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" required autocomplete="new-password">
+                                <input wire:model="password_confirmation" id="password-confirm" type="password" class="form-control" required autocomplete="new-password">
                             </div>
                         </div>
 
@@ -109,12 +123,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        const jenis_kelamin = document.getElementById("jenis_kelamin");
-
-        jenis_kelamin.addEventListener("change", () => {
-            $this.set("jenis_kelamin", jenis_kelamin.value);
-        });
-    </script>
 </div>

@@ -60,7 +60,7 @@
         <div class="form-group">
             <label class="pr-3">Jenis Kelamin : </label>
             <div wire:ignore class="d-inline">
-                <select id='jenis_kelamin'>
+                <select id="jenis_kelamin" class="form-control">
                     <option>Laki-Laki</option>
                     <option>Perempuan</option>
                 </select>

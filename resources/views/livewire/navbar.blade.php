@@ -116,8 +116,12 @@
         }
         /* Mobile Menu */
         @media only screen and (max-width: 576px){
+        nav {
+
+        }
         .menu-bars{
             display:flex;
+            /* margin-right: 80px; */
         }
         nav ul{
             position:absolute;
@@ -138,7 +142,7 @@
             margin-top: -20px;
         }
         nav .logo img {
-            margin-right: 270px;
+            margin-right: 190px;
         }
         .jamku {
             font-size: 15px;
@@ -161,7 +165,7 @@
         }
     </style>
 
-    <nav>
+    <nav class="">
         <div class="logo">
             @if($this->photo !== null)
                 <img class="rounded-circle" src="{{asset("storage/photo_profiles/" . $photo)}}" alt="logo sekolah" width="100px">

@@ -46,7 +46,3 @@
     </div>
 
 </div>
-
-{{-- <button wire:click='createView()' type="button" class="btn btn-sm btn-secondary">
-{{$view === "index" ? "Buat Anggota Siswa" : "Lihat Daftar Siswa"}}
-</button> --}}

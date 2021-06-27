@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(Admin::class)->prefix("admin")->group(function() {
-        Route::get("kelola/guru", KelolaGuru::class)->name("kelola_guru");
+        Route::any("kelola/guru", KelolaGuru::class)->name("kelola_guru");
         Route::get("kelola/siswa", KelolaSiswa::class)->name("kelola_siswa");
         Route::get("make-link-register/{status}", MakeLinkRegister::class)->name("make_link_register");
         Route::get("list-link-register/{status}", ListLinkRegister::class)->name("list_link_register");

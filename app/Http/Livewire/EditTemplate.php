@@ -14,9 +14,9 @@ class EditTemplate extends Component
         "editData"
     ];
 
-    public $name, $email, $nign, $mapel, $password, $status, $kelola_data, $nis, $nisn, $class, $no_absen;
-    public $jenis_kelamin = "Laki-Laki";
+    public $name, $email, $nign, $mapel, $password, $status, $kelola_data, $nis, $nisn, $class, $no_absen, $jenis_kelamin;
 
+    // method mount digunakan untuk menerima parameter/data
     public function mount($status)
     {
         $this->status = $status;
@@ -29,17 +29,21 @@ class EditTemplate extends Component
 
     public function editData($id)
     {
-        $this->kelola_data = $this->status === "teacher" ? Teacher::firstWhere("id", $id) : Student::firstWhere("id", $id);
         if($this->status === "teacher")
         {
+            $this->kelola_data = Teacher::firstWhere("id", $id);
             $this->nign=$this->kelola_data->nign;
             $this->mapel=$this->kelola_data->mapel;
-        } else {
+        }
+        else {
+            $this->kelola_data = Student::firstWhere("id", $id);
             $this->nisn=$this->kelola_data->nisn;
             $this->nis=$this->kelola_data->nis;
             $this->no_absen=$this->kelola_data->no_absen;
             $this->class=$this->kelola_data->classes->class;
         }
+
+        // field pada table user tidak akan terpengaruh
         $this->name=$this->kelola_data->user->name;
         $this->email=$this->kelola_data->user->email;
         $this->password = '';
@@ -61,17 +65,22 @@ class EditTemplate extends Component
 
         // reset field pada form
         $this->name=""; $this->email=""; $this->nign=""; $this->mapel=""; $this->password=""; $this->nisn=""; $this->nis=""; $this->no_absen=""; $this->class="";
-        $this->emit("succesUpdated", $status);
+        $this->emit("succesUpdated", $status); # kirim emit
     }
 
     protected function updateUser()
     {
-        $this->validate([
+        $this->validate
+        (
+            [
             "name" => "required|string",
             "email" => "required|email",
-        ], [
-            "name.string" => "Input Nama Hanya Berupa Huruf",
-        ]);
+            ],
+            [
+                "name.string" => "Input Nama Hanya Berupa Huruf",
+            ]
+        );
+
         if($this->email !== $this->kelola_data->user->email) {
             $this->validate(["email" => "unique:users"], ["email.unique" => "Email Yang Anda Inputkan Sudah Ada"]);
         }
@@ -88,7 +97,7 @@ class EditTemplate extends Component
             $this->validate( ["password" => "min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/|"] );
             $arr_user["password"] = Hash::make($this->password);
         }
-        // edit field user
+        // edit table user
         $this->kelola_data->user->update($arr_user);
     }
 
@@ -96,10 +105,11 @@ class EditTemplate extends Component
     {
         $this->validate([
             "mapel" => "required|string",
-            "nign" => "required|numeric",
+            "nign" => "required|numeric|unique:teachers",
         ], [
             "mapel.string" => "Input Mapel Berupa Huruf Numeric",
             "nign.numeric" => "NIGN Berupa Angka Bukun Huruf",
+            "nign.unique" => "Nomor NIGN sudah ada"
         ]);
 
         $this->kelola_data->update([
@@ -117,12 +127,13 @@ class EditTemplate extends Component
 
         $this->validate([
             "nis" => "required|numeric",
-            "nisn" => "required|numeric",
+            "nisn" => "required|numeric|unique:students",
             "no_absen" => "required|numeric|max:40"
         ], [ // validate
             "no_absen.max" => "Maximal Angka No Absen Adalah 40",
             "nis.numeric" => "NIS Hanya Berupa Huruf",
             "nisn.numeric" => "NISN Hanya Berupa Huruf",
+            "nisn.unique" => "Nomor NISN sudah ada!"
         ]);
         $this->kelola_data->update([
             "nis" => $this->nis,

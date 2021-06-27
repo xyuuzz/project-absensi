@@ -16,8 +16,11 @@
                     <p class="text-center">
                         <img src="{{asset("storage/photo_profiles/" . $profile)}}" alt="foto profil" class="img-fluid img-thumbnail rounded-circle" width="300px" height="200px" name="photo">
                         <div class="mx-auto col-lg-6 mt-3">
-                            <input type="file" class="form-control" wire:model='photo'>
+                            <input disabled type="file" class="form-control" wire:model='photo'>
                             @error('photo') <span class="error text-danger d-block text-center"><i>{{ $message }}</i></span> @enderror
+                            <div class="text-center mt-2">
+                                <small >Maaf, fitur uploade foto profil sedang mengalami masalah..</small>
+                            </div>
                         </div>
                     </p>
                 </div>

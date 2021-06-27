@@ -21,6 +21,11 @@ class KelolaSiswa extends Component
         $this->resetPage();
     }
 
+    protected function paginationView()
+    {
+        return "partials.custom_pagination";
+    }
+
     public function cari_berdasarkan($apa) // jika tombol cari berdasarkan di klik,
     {
         return $this->s_based_on = $apa; // maka masukan nilai yang di kirim ke $s_based_on untuk diproses nanti
@@ -28,16 +33,44 @@ class KelolaSiswa extends Component
 
     public function render()
     {
-        $kumpulan_data = Student::latest()->simplePaginate(10);
+        $kumpulan_data = Student::latest()->Paginate(10);
+
         // jika user mencari guru/ ada huruf pada input search
-        if(strlen($this->search)) {
-            $kumpulan_data = $this->s_based_on == null || $this->s_based_on == "name" ?
-                            array_map(function($user) {
-                                    return Student::where("user_id", $user["id"])->first();
-                                }, User::where("role", "student")->where("name", "like", "%{$this->search}%")->get()->toArray())
-                            : array_map(function($class) {
-                                    return Student::where("classes_id", $class["id"])->first();
-                                }, Classes::where("class", "like", "%{$this->search}%")->get()->toArray());
+        if(strlen($this->search))
+        {
+            // reset page
+            $this->updatingSearch();
+            // jika admin mencari siswa berdasarkan nama :
+            if($this->s_based_on == null || $this->s_based_on == "name")
+            {
+                // cari user yang role nya student, lalu cari nama yang similar dengan input admin, dapatkan semua dan ubah hasilnya menjadi array
+                // masukan hasilnya satu persatu ke dalam parameter $user pada arrow func,
+                // lalu cari student yang user_id nya sama dengan $user["id"] yang dikirimkan, pilih pertama
+                $kumpulan_data = array_map
+                            (
+                                fn($user) => Student::where("user_id", $user["id"])->first(),
+                                User::where("role", "student")
+                                        ->where("name", "like", "%{$this->search}%")
+                                        ->get()
+                                        ->toArray()
+                            );
+            }
+            else
+            {
+                // buat var kumpulan data yang berisi array kosong
+                $kumpulan_data = [];
+                // cari classes yang field class nya similar dengan input admin dan dapatkan semua
+                $classes = Classes::where("class", "like", "%{$this->search}%")
+                        ->get();
+                // foreach class yang sudah didapatkan
+                foreach($classes as $class)
+                {
+                    // pilih student yang memiliki class yang di looping
+                    // karena bentuk nya array/banyak element, maka pecah dengan spread operator
+                    // lalu push/masukan ke dalam var kumpulan data
+                    array_push($kumpulan_data, ...$class->student);
+                }
+            }
         }
 
         $status = "student";

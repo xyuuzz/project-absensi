@@ -37,7 +37,7 @@ class MeSeedCommand extends Command
      */
     public function handle()
     {
-        $this->call("migrate");
+        $this->call("migrate:refresh");
         $this->call("db:seed");
     }
 }
