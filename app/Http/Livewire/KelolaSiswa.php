@@ -28,6 +28,7 @@ class KelolaSiswa extends Component
 
     public function cari_berdasarkan($apa) // jika tombol cari berdasarkan di klik,
     {
+        $this->updatingSearch();
         return $this->s_based_on = $apa; // maka masukan nilai yang di kirim ke $s_based_on untuk diproses nanti
     }
 

@@ -8,7 +8,7 @@ use App\Models\{Teacher, Schedule, Student, Classes};
 class Absent extends Model
 {
     protected $fillable = ["teacher_id", "schedule_id"];
-    
+
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);

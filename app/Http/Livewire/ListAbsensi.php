@@ -17,61 +17,33 @@ class ListAbsensi extends Component
     public function render()
     {
         // urutkan dari yang terbaru, lalu paginate dengan 1 halaman hanya menampilkan 1 data
-        $list_absensi = Absent::latest()->simplePaginate(2);
+        $absents_teacher = Absent::where("teacher_id", Auth::user()->teacher->id);
+        $list_absensi = $absents_teacher->latest()
+                                        ->simplePaginate(2);
 
         if(strlen($this->query))
         {
             if($this->pilah_berdasarkan === "Tanggal")
             {
-                $list_absensi = Absent::where("created_at", "like", "%2021-06-{$this->query}%")
-                                        ->latest()
-                                        ->simplePaginate(2);
+                $list_absensi = $this->search_day($absents_teacher);
             }
             elseif($this->pilah_berdasarkan === "Bulan")
             {
-                $query = $this->query;
-                if(strlen($this->query) === 1)
-                {
-                    $query =  "0" . $this->query;
-                }
-                $list_absensi = Absent::where("created_at", "like", "%2021-{$query}%")
-                                        ->latest()
-                                        ->simplePaginate(2);
+                $list_absensi = $this->search_month($absents_teacher);
             }
             elseif($this->pilah_berdasarkan === "Tahun")
             {
-                $list_absensi = Absent::where("created_at", "like", "%{$this->query}%")
-                                        ->latest()
-                                        ->simplePaginate(2);
+                $list_absensi = $this->search_year($absents_teacher);
             }
             elseif($this->pilah_berdasarkan === "Kelas")
             {
-                // buat variabel berisi array kosong untuk menampung hasil
-                $temp = [];
-                // cari class yang similar dengan query user
-                $classes = Classes::where("class", "like", "%{$this->query}%")->get();
-                // looping semua absent
-                foreach(Absent::get() as $absent)
-                {
-                    // looping kelas yang sudah didapatkan
-                    foreach($classes as $class)
-                    {
-                        // jika absent mempunyai class yang sama dengan class tsb
-                        if($absent->classes()->where("class", $class->class)?->first())
-                        {
-                            // maka push obj absent tersebut ke dalam var temp
-                            array_push($temp, $absent);
-                        }
-                    }
-                }
-                // kita paginate arr temp yang berisi obj absent menggunakan custom_paginate method
-                $list_absensi = $this->custom_paginate($temp);
+                $list_absensi = $this->search_class($absents_teacher);
             }
         }
         else
         {
             // jika tidak ada absensi
-            if(count($list_absensi) === 0)
+            if(count($absents_teacher->get()) === 0)
             {
                 // kirim session flash, lalu redirect ke halaman buat_absensi
                 session()->flash("warning", "Absensi Anda Kosong, Silahkan Buat Dengan Mengisi Form Dibawah");
@@ -101,5 +73,55 @@ class ListAbsensi extends Component
             session()->flash("success", "Berhasil Dihapus!");
         }
         return redirect()->back();
+    }
+
+    protected function search_day($absents_teacher)
+    {
+        return $absents_teacher->where("created_at", "like", "%2021-06-{$this->query}%")
+        ->latest()
+        ->simplePaginate(2);
+    }
+
+    protected function search_month($absents_teacher)
+    {
+        $query = $this->query;
+        if(strlen($this->query) === 1)
+        {
+            $query =  "0" . $this->query;
+        }
+        return $absents_teacher->where("created_at", "like", "%2021-{$query}%")
+                                ->latest()
+                                ->simplePaginate(2);
+    }
+
+    protected function search_year($absents_teacher)
+    {
+        return $absents_teacher->where("created_at", "like", "%{$this->query}%")
+                                        ->latest()
+                                        ->simplePaginate(2);
+    }
+
+    protected function search_class($absents_teacher)
+    {
+        // buat variabel berisi array kosong untuk menampung hasil
+        $temp = [];
+        // cari class yang similar dengan query user
+        $classes = Classes::where("class", "like", "%{$this->query}%")->get();
+        // looping semua absent
+        foreach($absents_teacher->get() as $absent)
+        {
+            // looping kelas yang sudah didapatkan
+            foreach($classes as $class)
+            {
+                // jika absent mempunyai class yang sama dengan class tsb
+                if($absent->classes()->where("class", $class->class)?->first())
+                {
+                    // maka push obj absent tersebut ke dalam var temp
+                    array_push($temp, $absent);
+                }
+            }
+        }
+        // kita paginate arr temp yang berisi obj absent menggunakan custom_paginate method
+        return $this->custom_paginate($temp);
     }
 }

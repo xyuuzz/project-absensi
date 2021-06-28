@@ -24,7 +24,7 @@
     {{-- Looping semua absensi --}}
     @forelse($list_absensi as $absensi)
         {{-- Tampilkan absensi yang dimiliki oleh guru yang sedang login --}}
-        @if($absensi->teacher->id === Auth::user()->teacher->id)
+        {{-- @if($absensi->teacher->id === Auth::user()->teacher->id) --}}
             <div class="card mt-4 d-block">
                 <div class="card-body">
                     <div class="mb-smm-5">
@@ -43,7 +43,7 @@
                     <button wire:click='hapusAbsensi({{$absensi->id}})' type="button" class="btn btn-sm btn-outline-danger">Hapus Absensi</button>
                 </div>
             </div>
-        @endif
+        {{-- @endif --}}
     @empty
         <div class="card mt-4 d-block">
             <div class="card-body">

@@ -8,11 +8,11 @@
         @endif
         <div class="mb-3 d-block mt-2">
             <span>Cari Berdasarkan : </span>
-            <span wire:click='cari_berdasarkan("name", {{ count($_GET) ? $_GET["page"] : 1 }} )' class="btn btn-sm {{$s_based_on == "name" || $s_based_on == null ? "btn-warning" : "btn-secondary"}} ">Nama</span>
+            <span wire:click='cari_berdasarkan("name")' class="btn btn-sm {{$s_based_on == "name" || $s_based_on == null ? "btn-warning" : "btn-secondary"}} ">Nama</span>
             @if($status === "teacher")
-                <span  wire:click='cari_berdasarkan("mapel", {{ count($_GET) ? $_GET["page"] : 1 }} )' class="btn btn-sm {{$s_based_on == "mapel" ? "btn-warning" : "btn-secondary"}}">Mapel</span>
+                <span  wire:click='cari_berdasarkan("mapel")' class="btn btn-sm {{$s_based_on == "mapel" ? "btn-warning" : "btn-secondary"}}">Mapel</span>
             @elseif($status === "student")
-                <span  wire:click='cari_berdasarkan("class", {{ count($_GET) ? $_GET["page"] : 1 }} )' class="btn btn-sm {{$s_based_on == "class" ? "btn-warning" : "btn-secondary"}}">Kelas</span>
+                <span  wire:click='cari_berdasarkan("class")' class="btn btn-sm {{$s_based_on == "class" ? "btn-warning" : "btn-secondary"}}">Kelas</span>
             @endif
         </div>
     </div>

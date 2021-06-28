@@ -19,7 +19,6 @@
             @endif
 
             <h4 class="d-inline-block">List Link Register {{ $status }}</h4>
-            {{-- <button class="btn btn-sm btn-outline-danger float-right">Hapus Link 3 Hari Lalu</button> --}}
             <div class="table-responsive mt-3">
                 <table class="table table-sm">
                     <thead>
@@ -36,12 +35,10 @@
                         @forelse ($model as $item)
                             <tr>
                                 <td hidden>
-                                    <input type="text" value="
-                                        {{
-                                            $status === 'Guru' ?
-                                            route('register_teacher', ['mapel' => $item->mapel, 'register_teacher' => $item->slug] ) :
+                                    <input type="text"
+                                    value="{{
                                             route('register_student', ['register_student' => $item->slug])
-                                        }}"
+                                            }}"
                                     class="copyText" hidden>
                                 </td>
                                 <td>

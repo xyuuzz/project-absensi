@@ -17,7 +17,7 @@ class MakeLinkRegister extends Component
 
     public function render()
     {
-        $this->dimulai = date("m-d-y");
+        $this->dimulai = date("Y-m-d");
         return view('livewire.make-link-register');
     }
 
@@ -30,7 +30,7 @@ class MakeLinkRegister extends Component
 
         if($this->dimulai > $this->berakhir) {
             $this->addError("linkNotActivated", "Tanggal Saat Link Aktif harus sebelum Tanggal Link Kadaluarsa");
-            $this->berakhir = '';
+            // $this->berakhir = '';
             return redirect()->back();
         }
 

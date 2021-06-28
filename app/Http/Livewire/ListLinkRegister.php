@@ -10,7 +10,7 @@ class ListLinkRegister extends Component
 {
     use WithPagination;
 
-    public $status, $slug, $dimulai, $berakhir, $mapel, $class, $item1, $item2;
+    public $status, $slug, $dimulai, $berakhir, $mapel, $class;
 
     public function mount($status) {
         $this->status = $status === "teacher" ? "Guru" : "Siswa";
@@ -18,18 +18,14 @@ class ListLinkRegister extends Component
 
     public function render()
     {
-        if($this->status === "teacher") {
-            $model = RegisterTeacher::latest()->paginate(5);
-        } else {
-            $model = RegisterStudent::latest()->paginate(5);
-        }
+        $model = RegisterStudent::latest()->paginate(5);
         return view('livewire.list-link-register', compact("model"));
     }
 
     public function deleteData($id)
     {
-        $this->status === "Guru" ? RegisterTeacher::find($id)->delete() : RegisterStudent::find($id)->delete();
-        session()->flash("success", "Data " . $this->status === "Guru" ? "Guru" : "Siswa" . " Berhasil Dihapus!");
+        RegisterStudent::find($id)->delete();
+        session()->flash("success", "Data Siswa Berhasil Dihapus!");
     }
 
 }

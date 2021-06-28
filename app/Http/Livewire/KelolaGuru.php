@@ -32,9 +32,9 @@ class KelolaGuru extends Component
     }
 
     // method search engine based on..
-    public function cari_berdasarkan($apa, $page) // jika tombol cari berdasarkan di klik,
+    public function cari_berdasarkan($apa) // jika tombol cari berdasarkan di klik,
     {
-        $_GET["page"] = $page;
+        $this->updatingSearch();
         $this->s_based_on = $apa; // maka masukan nilai yang di kirim ke $s_based_on untuk diproses nanti
     }
 
@@ -42,7 +42,7 @@ class KelolaGuru extends Component
     {
         $kumpulan_data = Teacher::latest()->Paginate(10);
         // jika tidak ada field pada table guru
-        if(!Teacher::count()) {
+        if(!$kumpulan_data->count()) {
             session()->flash("danger", "Tidak Ada Guru Yang Terdaftar, Silahkan Buat Guru Dengan Mengisi Form Dibawah");
             $this->view = "create";
         }
@@ -74,7 +74,8 @@ class KelolaGuru extends Component
         // desk : jika $s_based_on adalah null atau name, maka cari guru berdasarkan name dengan query yang diinputkan admin, namun jika $s_based_on nya adalah mapel, maka cari guru berdasarkan mapel dengan query yang diinputkan admin
 
         // jika ada var global yang bernama page get pada url, maka ambil, jika tidak berikan nilai default 1
-        $index = count($_GET) ? ($_GET['page'] * 10) - 9 : 1;
+        $index = count($_GET) ? ($_GET["page"] * 10) - 9 : 1;
+        // $index = 1;
         $status = "teacher";
 
         return view('livewire.kelola-guru', compact("kumpulan_data", "index", "status"));

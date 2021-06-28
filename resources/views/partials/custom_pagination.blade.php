@@ -15,7 +15,7 @@
         @if(is_array($element))
             @foreach($element as $page => $url)
                 {{--
-                    Jika ada var_g $_GET, maka pasangkan page dengan var_g get, jika tidak maka page == 1 
+                    Jika ada var_g $_GET, maka pasangkan page dengan var_g get, jika tidak maka page == 1
                 --}}
                 @if( count($_GET) ? $page == $_GET["page"] : $page == 1 )
                     <li class="page-item active">
