@@ -26,6 +26,20 @@
         body {
             background-color: rgb(181, 179, 179);
         }
+        @media only screen and (max-width: 576px){
+            .float-smm-left {
+                float: left;
+            }
+            .mt-smm-1 {
+                margin-top: 10px;
+            }
+            .d-smm-block {
+                display: block;
+            }
+            .mb-smm-5 {
+                margin-bottom: 60px;
+            }
+        }
     </style>
     @endif
 

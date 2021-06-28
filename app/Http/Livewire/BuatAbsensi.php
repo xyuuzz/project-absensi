@@ -19,7 +19,7 @@ class BuatAbsensi extends Component
 
     public function buatAbsensi()
     {
-        dd($this->list_kelas);
+        // dd($this->list_kelas);
         // validation
         if($this->list_kelas === null || $this->sche === null || $this->sche === "Pilih Jam Absensi Dibawah")
         {

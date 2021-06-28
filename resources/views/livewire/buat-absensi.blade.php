@@ -94,15 +94,15 @@
     document.addEventListener("livewire:load", function() {
         // variabel untuk menyimpan
         let temp = [];
-        // mendapatkan semua element input dengan class form-check-input
-        const v_kelas = document.querySelectorAll("input.form-check-input");
-
+        // mendapatkan semua element input yang memiliki type checkbox
+        const v_kelas = document.querySelectorAll("input[type=checkbox]");
         v_kelas.forEach(function(kelas) { // pertama kita looping class nya
             kelas.addEventListener("change", () => {  // lalu jika ada input class yang berubah nilainya(dicentang/ tidak jadi dicentang)
                 if(temp.indexOf(kelas.value) === -1 ) // jika class nya tidak ada di dalam var temp, maka tambahkan class tsb ke var temp
                 {
                     temp.push(kelas.value);
-                } else // namun jika class nya ada di dalam var temp, maka hapus class tersebut dari var temp.
+                }
+                else // namun jika class nya ada di dalam var temp, maka hapus class tersebut dari var temp.
                 {
                     temp.splice(temp.indexOf(kelas.value), 1);
                 }
